@@ -1,0 +1,269 @@
+:root {
+  --negro: #393939;
+  --blanco: #ececec;
+  --sombra-ppal: #c9c9c9;
+  --sombra-sec: #ffffff;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+      --negro: #ececec;
+      --blanco: #303030;
+      --sombra-ppal: #242424;
+      --sombra-sec: #3c3c3c;
+      --sombra-focus: #636363;
+  }
+}
+
+body {
+  background-color: var(--blanco);
+}
+
+
+.container {
+  display: flex;
+  min-height: 96vh;
+  margin-top: 30px;
+}
+
+.tabs-container {
+  width: 150px;
+  margin-right: 20px;
+  padding: 15px;
+  color: var(--negro);
+  border-radius: 0.5em;
+  background-color: var(--blanco);
+  box-shadow: 0.3em 0.3em 0.6em var(--sombra-ppal), -0.3em -0.3em 0.6em var(--sombra-sec);
+  margin-bottom: 20px;
+  transition: width 0.3s ease;
+}
+
+.tabs-container:hover {
+  width: 300px; 
+}
+
+
+
+.tabs {
+  float: left;
+  width: 100%;
+}
+
+.tablink {
+  color: var(--negro);
+  border-radius: 0.5em;
+  background-color: var(--blanco);
+  box-shadow: 0.3em 0.3em 0.6em var(--sombra-ppal), -0.3em -0.3em 0.6em var(--sombra-sec), inset 0 0 0 transparent, inset 0 0 0 transparent;
+  width: 100%;
+  text-align: left;
+  padding: 18px 18px; 
+  display: block;
+  border: none;
+  outline: none;
+  cursor: pointer;
+  margin-bottom: 10px;
+}
+
+.tablink:hover {
+  background-color: var(--sombra-sec);
+}
+
+.tablink.active {
+  background-color: var(--sombra-focus); 
+  outline: none; 
+}
+
+.tabcontent-container {
+  flex-grow: 1;
+  padding: 1em;
+  color: var(--negro);
+  border-radius: 0.5em;
+  background-color: var(--blanco);
+  box-shadow: 0.3em 0.3em 0.6em var(--sombra-ppal), -0.3em -0.3em 0.6em var(--sombra-sec);
+  margin-bottom: 20px;
+  margin-right: 20px;
+}
+
+/* Media query para pantallas de tamaño medio */
+@media only screen and (max-width: 768px) {
+  .tabcontent-container {
+      width: calc(100% - 30px);
+      right: 15px;
+      left: 15px;
+      bottom: 20px; 
+  }
+}
+
+
+.tabcontent {
+  display: none;
+  padding: 20px;
+  position: fixed;
+  margin-left: 150px;
+}
+
+.tabcontent h3 {
+  margin-top: 0;
+  color: var(--negro);
+}
+
+.active {
+  background-color: #ccc;
+  color: #000;
+}
+
+
+/* //////////////////// DATOS /////////////////////// */
+
+.tabcontent-container #Tab2 {
+  width: calc(96% - 20%); 
+  margin-left: 2%;
+  margin-right: 2%;
+}
+
+
+
+.table-header {
+  display: flex;
+ margin-bottom: 30px;
+}
+
+.table-header > div {
+  flex: 1;
+  border-radius: 0.5em;
+  background-color: var(--blanco);
+  box-shadow: 0.3em 0.3em 0.6em var(--sombra-ppal), -0.3em -0.3em 0.6em var(--sombra-sec);
+  padding: 1.5em 2em;
+  margin-right: 2%; 
+  margin-left: 2%; 
+  text-align: center;
+}
+
+.table-body {
+  display: flex;
+  flex-direction: column;
+}
+
+
+.table-scroll {
+  position: relative;
+  overflow-x: auto; 
+  overflow-y: auto; 
+  max-height: 50vh; 
+}
+
+.row {
+  position: relative; 
+  display: flex;
+  align-items: center;
+  border-radius: 0.5em;
+  background-color: var(--blanco);
+  box-shadow: 0.3em 0.3em 0.6em var(--sombra-ppal), -0.3em -0.3em 0.6em var(--sombra-sec);
+  margin-bottom: 2%;
+  width: 96%; 
+  margin: 2% auto; 
+  cursor: pointer;
+  transform: translateY(100%); 
+  transition: transform 0.5s ease;
+}
+
+.cell {
+  flex: 1;
+  padding: 1em;
+  overflow: hidden;
+  text-align: center;
+}
+
+
+/* Agrega esto al final de tus estilos CSS */
+
+@media only screen and (max-width: 768px) {
+  .table-header > div {
+    padding: 10px; 
+    margin-right: 10px;
+    margin-left: 10px;
+  }
+
+  .row {
+    flex-direction: column;
+    height: auto; 
+    margin-bottom: 5px; 
+  }
+
+  .cell {
+    padding: 5px; 
+  }
+
+  .table-body {
+    max-height: none;
+  }
+}
+
+
+.cell img {
+  max-width: 50px;
+  height: auto;
+  display: block;
+  margin: 0 auto;
+}
+
+.fondoWapo {
+  width: 96%;
+  border-radius: 0.5em;
+  background-color: var(--blanco);
+  box-shadow: 0.3em 0.3em 0.6em var(--sombra-ppal), -0.3em -0.3em 0.6em var(--sombra-sec);
+  padding: 2em;
+  margin-bottom: 2%;
+  margin: 2% auto;
+  height: 60vh; 
+}
+
+
+/* ///////////////////////////// */
+
+.blur-userInfo {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 5; 
+  backdrop-filter: blur(5px); 
+  display: none;
+}
+
+.user-info-container {
+  position: fixed;
+  width: 300px;
+  height: 600px;
+  border-radius: 0.5em;
+  background-color: var(--blanco);
+  box-shadow: 0.3em 0.3em 0.6em var(--sombra-ppal), -0.3em -0.3em 0.6em var(--sombra-sec);
+  padding: 20px;
+  display: none;
+  z-index: 6;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%);
+}
+
+.user-info-container img {
+  max-width: 100%;
+  height: auto;
+  border-radius: 50%; 
+}
+
+.user-info-container img:hover {
+  filter: blur(5px);
+}
+
+
+.img-edit {
+  position: absolute;
+  top: 20%;
+  left: calc(50% - 32px); /* 32px es la mitad del ancho de .img-edit (64px) */
+  display: none;
+  height: 64px;
+  width: 64px;
+}
+

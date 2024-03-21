@@ -1,0 +1,262 @@
+/* /css/register.css */
+
+/* Import Google font - Poppins */
+@import url("https://fonts.googleapis.com/css2?family=Poppins:wght@200;300;400;500;600;700&display=swap");
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  font-family: "Poppins", sans-serif;
+}
+
+body {
+  height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: url('../img/liquidbackground.png') center/cover no-repeat;
+}
+
+.center-box {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.box {
+  position: relative;
+  width: 600px;
+  height: 700px;
+  border-radius: 20px;
+  display: grid;
+  place-items: center;
+  overflow: hidden;
+}
+
+.lights-box {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  border-radius: 20px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  z-index: 0;
+}
+
+
+.lights-box::before{
+  content: '';
+  position: absolute;
+  width: 910px; 
+  height: 910px; 
+  background-image: conic-gradient(transparent, transparent, transparent, #00fff2);
+  animation: rotate 6s linear infinite;
+  z-index: -2;
+}
+.lights-box::after {
+  content: '';
+  position: absolute;
+  width: 910px; 
+  height: 910px; 
+  background-image: conic-gradient(transparent, transparent, transparent, #00fff2);
+  animation: rotate 6s linear infinite;
+  animation-delay: -3s;
+  z-index: -2;
+}
+
+
+.lights-box span {
+  position: absolute;
+  inset: 5px;
+  border-radius: 16px;
+  background-color: #303030;
+  z-index: -1;
+}
+
+@keyframes rotate {
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(360deg);
+  }
+}
+
+.back-button {
+  position: absolute;
+  top: 30px;
+  left: 30px;
+  text-decoration: none;
+  z-index: 5;
+}
+
+.back-button img {
+  width: 30px;
+  height: auto;
+  cursor: pointer;
+  z-index: 5;
+}
+
+.container {
+  height: 100%;
+  width: 80%;
+  max-width: 400px;
+  top: 0;
+  padding: 20px;
+  background-color: transparent;
+  display: flex; 
+  flex-direction: column; 
+  justify-content: center; 
+  align-items: center;
+  z-index: 4;
+}
+
+
+
+
+h1 {
+  color: white;
+  margin-bottom: 50px;
+}
+
+.steps {
+  display: flex;
+  gap: 20px;
+  position: relative;
+  top: -5%;
+  align-items: center;
+  justify-content: center;
+  z-index: 1;
+}
+
+.steps .circle {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 45px;
+  width: 45px;  
+  color: #999;
+  font-size: 22px;
+  font-weight: 500;
+  border-radius: 50%;
+  background: #fff;
+  border: 4px solid #e0e0e0;
+  transition: all 200ms ease;
+  transition-delay: 0s;
+}
+
+.steps .circle.active {
+  transition-delay: 100ms;
+  border-color: #00fff2;
+  color: #303030;
+}
+
+.steps .progress-bar {
+  position: absolute;
+  top: 50%;
+  left: 50%; 
+  transform: translateX(-50%);
+  height: 4px;
+  width: 84%;
+  background: #e0e0e0;
+  z-index: -1;
+}
+
+
+.progress-bar .indicator {
+  position: absolute;
+  top: 0;
+  height: 100%;
+  width: 0;
+  background: #00fff2;
+  transition: width 300ms ease;
+  z-index: 1;
+}
+
+.error-message {
+  color: #ff0000;
+  /* visibility: hidden;  */
+  margin-top: -20px;
+  margin-bottom: 5px;
+  z-index: 5;
+}
+
+.error-message.active {
+  visibility: visible; 
+}
+
+
+.buttons {
+  display: flex;
+  gap: 20px;
+  justify-content: center;
+  align-items: center;
+  flex-wrap: wrap;
+  margin-top: 20px; 
+}
+
+.buttons button {
+  padding: 8px 25px;
+  background: #00fff2;
+  border: none;
+  border-radius: 8px;
+  color: #000000;
+  font-size: 16px;
+  font-weight: 400;
+  cursor: pointer;
+  box-shadow: 0 5px 10px rgba(0, 0, 0, 0.05);
+  transition: all 200ms linear;
+}
+
+.buttons button:hover {
+  background-color: #35d6ce;
+}
+
+.buttons button:active {
+  transform: scale(0.97);
+  background: #35d6ce;
+}
+
+.buttons button:disabled {
+  background: #35d6ce;
+  cursor: not-allowed;
+}
+
+.form-steps {
+  position: relative;
+}
+
+.form-steps .step:not(:first-child) {
+  display: none;
+}
+
+.input-group {
+  margin-bottom: 20px;
+}
+
+label {
+  display: block;
+  margin-bottom: 6px;
+  color: white;
+  text-align: left;
+}
+
+input,
+select {
+  width: 100%;
+  padding: 8px;
+  font-size: 16px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+}
+
+input:focus,
+select:focus {
+  border: 4px solid #00fff2;
+  box-shadow: 0 0 4px #00fff2;
+  outline: none;
+}
+

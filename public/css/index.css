@@ -1,0 +1,290 @@
+/* /css/index.css */
+@import url("https://fonts.googleapis.com/css?family=Poppins:100,200,300,400,500,600,700,800,900");
+
+body {
+  background: url("../img/liquidbackground.png") center/cover no-repeat;
+  height: 100vh;
+
+}
+
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  font-family: "Poppins", sans-serif;
+}
+
+
+/* //////////////////////////// Navbar /////////////////////////////////////// */
+
+
+.navbar-nav {
+  width: 100%;
+  display: flex;
+  justify-content: space-between;
+  padding-left: 0;
+}
+
+.navbar-nav .nav-item {
+  flex-grow: 1;
+  flex-basis: 0;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.navbar-nav .nav-link {
+  color: white !important;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.navbar-nav .nav-item .nav-link[data-text="Logout"] a {
+  display: flex;
+  align-items: center;
+  color: white;
+  text-decoration: none;
+}
+
+
+.navbar-nav .nav-item .nav-link[data-text="Home"] ion-icon,
+.navbar-nav .nav-item .nav-link[data-text="Perfil"] ion-icon,
+.navbar-nav .nav-item .nav-link[data-text="Fotos"] ion-icon,
+.navbar-nav .nav-item .nav-link[data-text="Settings"] ion-icon,
+.navbar-nav .nav-item .nav-link[data-text="Logout"] ion-icon {
+  position: relative;
+  cursor: pointer;
+}
+
+.navbar-nav .nav-link .nav-text {
+  display: none;
+}
+
+.navbar-nav .nav-item .nav-link[data-text="Home"]:hover .nav-text,
+.navbar-nav .nav-item .nav-link[data-text="Perfil"]:hover .nav-text,
+.navbar-nav .nav-item .nav-link[data-text="Fotos"]:hover .nav-text,
+.navbar-nav .nav-item .nav-link[data-text="Settings"]:hover .nav-text,
+.navbar-nav .nav-item .nav-link[data-text="Logout"]:hover .nav-text {
+  display: inline;
+  position: relative;
+  left: 10%;
+  top: 50%;
+  transform: translate(-50%, -50%);
+  opacity: 1;
+  transition: transform 0.3s ease, opacity 0.3s ease;
+  cursor: pointer;
+}
+
+.navbar-nav .nav-item .nav-link:hover .nav-text {
+  transform: translateX(0) translateY(-50%);
+  opacity: 1;
+}
+
+.navbar-nav .nav-item .nav-link .nav-text {
+  display: inline;
+  position: relative;
+  left: -5px;
+  top: 50%; 
+  transform: translate(-100%, -50%);
+  opacity: 0;
+  transition: transform 0.2s ease, opacity 0.15s ease;
+}
+
+
+
+
+
+.navbar-nav .nav-item .nav-link[data-text="Home"]:hover ion-icon,
+.navbar-nav .nav-item .nav-link[data-text="Perfil"]:hover ion-icon,
+.navbar-nav .nav-item .nav-link[data-text="Fotos"]:hover ion-icon,
+.navbar-nav .nav-item .nav-link[data-text="Settings"]:hover ion-icon,
+.navbar-nav .nav-item .nav-link[data-text="Logout"]:hover ion-icon {
+  transform: translateX(-20px);
+  transition: transform 0.3s ease;
+}
+
+.navbar-nav .nav-item .nav-link ion-icon {
+  font-size: 24px;
+  margin-right: 5px;
+  transition: transform 0.3s ease;
+}
+
+.navbar-nav .nav-item .nav-link:hover ion-icon {
+  transform: translateX(-20px);
+}
+
+.navbar-nav .nav-link-group {
+  display: flex;
+  align-items: center;
+  cursor: pointer;
+}
+
+.navbar-nav .nav-link-divider {
+  margin: 0 5px;
+  color: white;
+}
+
+.navbar-nav .nav-link-group .nav-link {
+  margin-right: 5px;
+}
+
+.navbar-nav .nav-link-group .nav-link:last-child {
+  margin-right: 0;
+}
+
+
+
+/* ////////////////////////////////////// Home //////////////////////////////////////////// */
+
+
+.hero {
+
+  color: #fff;
+  text-align: center;
+  padding: 100px 0;
+  margin-bottom: 0;
+}
+
+.hero h2 {
+  margin: 0;
+}
+
+.hero p {
+  font-size: 18px;
+  margin-bottom: 100px;
+}
+
+.button {
+  background-image: url(../img/black-white-abstract-background.png);
+  background-size: cover;
+  border: 2px solid white;
+  color: #fff;
+  padding: 15px 30px;
+  text-decoration: none;
+  border-radius: 5px;
+  font-size: 28px;
+  font-weight: bold;
+}
+
+
+
+/* /////////////////////////////////// Perfil ///////////////////////////////////////////// */
+
+.perfil-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+}
+
+
+.perfil {
+  width: 450px;
+  height: 640px;
+  background-color: #000000;
+  border-radius: 20px;
+  box-shadow: 0 0 40px rgba(255, 255, 255, 0.5);
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.banner {
+  width: 100%;
+  height: 185px;
+  background: url('../img/banner-profile.png') center/cover no-repeat;
+}
+
+.logo-perfil {
+  margin-top: -120px;
+  margin-bottom: 30px;
+}
+
+.logo-perfil img {
+  width: 250px;
+  height: 250px;
+  border-radius: 50%;
+  overflow: hidden;
+  box-shadow: 0 0 20px 5px rgba(255, 255, 255, 0.5);
+}
+
+.nombre-perfil h2{
+  font-family: "Poppins", sans-serif !important;
+  font-size: 35px;
+  font-weight: 700;
+  text-align: center;
+  margin-top: 10px;
+  color: #ffffff;
+  margin-bottom: 50px;
+}
+
+
+.espacio-separativo {
+  margin-top: 20px;
+  text-align: center;
+}
+
+.espacio-separativo p {
+  font-size: 14px;
+  color: #fff;
+}
+
+.linea-separativa1 {
+  width: 500px;
+  height: 1px;
+  background-color: #fff;
+  margin-top: 185px;
+  margin-bottom: 10px;
+}
+
+.linea-separativa2 {
+  width: 500px;
+  height: 1px;
+  background-color: #fff;
+  margin-top: 10px;
+  margin-bottom: 10px;
+}
+
+.datos-usuario {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-top: 20px;
+}
+
+.estadisticas {
+  display: flex;
+  justify-content: space-around;
+  align-items: center;
+}
+
+.dato {
+  text-align: center;
+  margin: 0 40px;
+}
+
+.dato p:first-child {
+  font-weight: bold;
+}
+
+.dato p {
+  font-size: 20px;
+  margin: 0;
+  color: #fff;
+}
+
+
+
+/* //////////////////////////// Footer //////////////////////////////// */
+footer {
+  background-color: transparent;
+  color: #fff;
+  text-align: center;
+  padding: 10px 0;
+  position: fixed;
+  bottom: 0;
+  width: 100%;
+}

@@ -1,0 +1,129 @@
+/* @import url("https://fonts.googleapis.com/css?family=Poppins:100,200,300,400,500,600,700,800,900");
+
+body {
+  background: url("../../img/liquidbackground.png") center/cover no-repeat fixed; 
+  height: 100vh;
+  margin: 0;
+  
+}
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  font-family: "Poppins", sans-serif;
+} */
+
+
+.perfil-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.perfil {
+  width: 450px;
+  height: 640px;
+  background-color: #000000;
+  border-radius: 20px;
+  box-shadow: 0 0 40px rgba(255, 255, 255, 0.5);
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.banner {
+  width: 100%;
+  height: 185px;
+  background: url('../../img/banner-profile.png') center/cover no-repeat;
+}
+
+.logo-perfil {
+  margin-top: -120px;
+  margin-bottom: 30px;
+}
+
+.logo-perfil img {
+  width: 250px; /* Ajusta según sea necesario */
+  height: 250px; /* Ajusta según sea necesario */
+  border-radius: 50%;
+  overflow: hidden;
+  box-shadow: 0 0 20px 5px rgba(255, 255, 255, 0.5); /* Sombra blanca alrededor del círculo */
+}
+
+.nombre-perfil {
+  font-size: 24px; /* Ajusta según sea necesario */
+  text-align: center;
+  margin-top: 10px; /* Ajusta según sea necesario */
+  color: #ffffff; /* Color blanco */Poppins
+  margin-bottom: 50px;
+}
+
+.espacio-separativo {
+  margin-top: 20px; /* Ajusta según sea necesario */
+  text-align: center;
+}
+
+.espacio-separativo p {
+  font-size: 14px; /* Ajusta según sea necesario */
+  color: #fff; /* Color del texto */
+}
+
+.linea-separativa1 {
+  width: 500px;
+  height: 1px;
+  background-color: #fff; /* Color de la línea separativa */
+  margin-top: 185px; /* Espacio entre el texto y la línea */
+  margin-bottom: 10px; /* Espacio entre la línea y el contenido siguiente */
+}
+
+.linea-separativa2 {
+  width: 500px;
+  height: 1px;
+  background-color: #fff; /* Color de la línea separativa */
+  margin-top: 10px; /* Espacio entre el texto y la línea */
+  margin-bottom: 10px; /* Espacio entre la línea y el contenido siguiente */
+}
+
+.datos-usuario {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-top: 20px;
+}
+
+.estadisticas {
+  display: flex;
+  justify-content: space-around;
+  align-items: center;
+}
+
+.dato {
+  text-align: center;
+  margin: 0 40px;
+}
+
+.dato p:first-child {
+  font-weight: bold; /* Hace que el primer párrafo sea negrita */
+}
+
+.dato p {
+  font-size: 20px;
+  margin: 0;
+  color: #fff;
+}
+
+
+
+
+/* Estilos para el footer */
+footer {
+    background-color: transparent;
+    color: #fff;
+    text-align: center;
+    padding: 10px 0;
+    position: fixed;
+    bottom: 0;
+    width: 100%;
+  }
+  
