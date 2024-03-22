@@ -7,6 +7,7 @@
     <title>Document</title>
     <link rel="stylesheet" href="{{ asset('css/admin/mainTablet.css') }}">
     <script src="{{ asset('js/admin/adminPanel.js') }}"></script>
+    <!-- <script src="https://cdnjs.cloudflare.com/ajax/libs/fullcalendar/5.10.0/main.min.js"></script> -->
 </head>
 
 <body>
@@ -72,9 +73,7 @@
 
             <span id="Tab4" class="tabcontent">
                 <h1>Gestion de Citas</h1>
-                <iframe
-                    src="https://calendar.google.com/calendar/embed?src=barberiaabellanas%40gmail.com&ctz=Europe%2FMadrid"
-                    style="border: 0" width="800" height="600" frameborder="0" scrolling="no"></iframe>
+                <div id="calendar"></div>
             </span>
         </span>
     </div>

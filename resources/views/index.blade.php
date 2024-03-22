@@ -81,7 +81,7 @@
                 <h2>Bienvenido a Barberia Abel·lanas</h2>
                 <p>El mejor lugar para cuidar de tu barba y cabello.</p>
                 <a href="#" class="btn btn-primary">Reservar cita</a>
-                <script type="module" src="{{ asset('js/silla.js') }}"></script>
+                <!-- <script type="module" src="{{ asset('js/silla.js') }}"></script> -->
             </div>
         </section>
     </div>

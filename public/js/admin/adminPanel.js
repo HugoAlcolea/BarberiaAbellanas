@@ -29,6 +29,7 @@ document.addEventListener('DOMContentLoaded', function () {
             userInfoDiv.style.display = 'none';
         });
     }
+    
 
 });
 
@@ -100,6 +101,5 @@ function showUserInfo(userId) {
         .catch(error => console.error('Error al obtener la información del usuario:', error));
 }
 
-function logout() {
-    window.location.href = "{{ route('logout') }}";
-}
+
+

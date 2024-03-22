@@ -26,6 +26,5 @@ document.addEventListener("DOMContentLoaded", function() {
         });
     });
 
-    // Mostrar el contenido de la primera pestaña al cargar la página
     showTab("home");
 });

@@ -132,7 +132,6 @@
                         </form>
                     </div>
                 </div>
-                <!-- Fin del Formulario de Registro en Pasos -->
             </div>
         </div>
     </div>

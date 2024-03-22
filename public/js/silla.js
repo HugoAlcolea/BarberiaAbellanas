@@ -3,6 +3,8 @@
 import * as THREE from '../../node_modules/three';
 import { OrbitControls } from '../../node_modules/three/examples/jsm/controls/OrbitControls.js';
 import { SplineLoader } from '../../node_modules/@splinetool/loader';
+import { GLTFLoader } from '../../node_modules/three/examples/jsm/loaders/GLTFLoader.js';
+
 
 
 // camera

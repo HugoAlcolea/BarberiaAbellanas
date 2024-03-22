@@ -14,8 +14,8 @@ let currentStep = 1;
 const showError = (step, message) => {
   const errorMessage = document.getElementById(`error-step-${step}`);
   errorMessage.textContent = message;
-  errorMessage.classList.add("active"); // Agregar la clase active
-  errorMessage.style.height = "auto"; // Establecer el height a "auto" cuando está activo
+  errorMessage.classList.add("active");
+  errorMessage.style.height = "auto"; 
 };
 
 // Función para ocultar mensajes de error
@@ -24,8 +24,8 @@ const hideError = (step) => {
 
   // Verificar si el elemento existe antes de intentar manipularlo
   if (errorMessage) {
-    errorMessage.style.height = "0px"; // Establecer el height a 0px cuando está oculto
-    errorMessage.classList.remove("active"); // Quitar la clase active
+    errorMessage.style.height = "0px"; 
+    errorMessage.classList.remove("active"); 
   }
 };
 
@@ -33,7 +33,6 @@ const hideError = (step) => {
 
 // function that updates the current step and updates the DOM
 const updateSteps = () => {
-  // loop through all circles and add/remove "active" class based on their index and current step
   circles.forEach((circle, index) => {
     circle.classList[`${index < currentStep ? "add" : "remove"}`]("active");
   });

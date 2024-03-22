@@ -6,7 +6,8 @@ use Illuminate\Http\Request;
 use Illuminate\Routing\Controller;
 use App\Models\CustomUser;
 use Illuminate\Support\Facades\Auth;
-
+use Google\Client;
+use Google\Service\Calendar;
 
 class AdminController extends Controller
 {
@@ -22,10 +23,9 @@ class AdminController extends Controller
         return response()->json($user);
     }
 
-    public function logout(){
+    public function logout()
+    {
         Auth::logout();
         return redirect()->route('index');
     }
-
-    
 }

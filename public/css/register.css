@@ -178,7 +178,6 @@ h1 {
 
 .error-message {
   color: #ff0000;
-  /* visibility: hidden;  */
   margin-top: -20px;
   margin-bottom: 5px;
   z-index: 5;
