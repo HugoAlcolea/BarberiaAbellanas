@@ -3,6 +3,7 @@
   --blanco: #ececec;
   --sombra-ppal: #c9c9c9;
   --sombra-sec: #ffffff;
+  --azulCielo: #00fff2;
 }
 
 @media (prefers-color-scheme: dark) {
@@ -12,6 +13,7 @@
       --sombra-ppal: #242424;
       --sombra-sec: #3c3c3c;
       --sombra-focus: #636363;
+      --azulCielo: #00fff2;
   }
 }
 
@@ -20,14 +22,14 @@ body {
 }
 
 
-.container {
+.main-container {
   display: flex;
   min-height: 96vh;
   margin-top: 30px;
 }
 
 .tabs-container {
-  width: 150px;
+  width: 200px;
   margin-right: 20px;
   padding: 15px;
   color: var(--negro);
@@ -39,7 +41,7 @@ body {
 }
 
 .tabs-container:hover {
-  width: 300px; 
+  width: 320px; 
 }
 
 
@@ -209,15 +211,16 @@ body {
 }
 
 .fondoWapo {
-  width: 96%;
+  width: 70%;
+  height: auto;
   border-radius: 0.5em;
   background-color: var(--blanco);
   box-shadow: 0.3em 0.3em 0.6em var(--sombra-ppal), -0.3em -0.3em 0.6em var(--sombra-sec);
   padding: 2em;
   margin-bottom: 2%;
   margin: 2% auto;
-  height: 60vh; 
 }
+
 
 
 /* ///////////////////////////// */
@@ -267,4 +270,3 @@ body {
   height: 64px;
   width: 64px;
 }
-

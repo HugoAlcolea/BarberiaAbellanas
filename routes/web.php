@@ -35,16 +35,14 @@ Route::get('/principal', function () {
 
 // Rutas de Perfil
 Route::get('/principal/perfil', [CustomUserController::class, 'showPerfil'])->name('perfil');
-
 // Rutas de Fotos
 Route::get('/principal/fotos', [CustomUserController::class, 'showFotos'])->name('fotos');
 
 // Rutas de Settings
 Route::get('/principal/settings', [CustomUserController::class, 'showSettings'])->name('settings');
-
 Route::get('/logout', [CustomUserController::class, 'logout'])->name('logout');
 
 // Rutas Admin
 Route::get('/admin/user/{id}', [AdminController::class, 'getUserInfo'])->name('admin.user.info');
-
 Route::get('/logout', [AdminController::class, 'logout'])->name('logout');
+Route::get('/admin/calendar', [AdminController::class, 'calendar'])->name('admin.calendar');

@@ -6,7 +6,6 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Barberia Abel·lanas</title>
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
-    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
     <link rel="stylesheet" href="{{ asset('css/index.css') }}">
     <script src="{{ asset('js/index.js') }}"></script>
 
@@ -80,8 +79,9 @@
             <div class="container">
                 <h2>Bienvenido a Barberia Abel·lanas</h2>
                 <p>El mejor lugar para cuidar de tu barba y cabello.</p>
+                @if(Auth::check())
                 <a href="#" class="btn btn-primary">Reservar cita</a>
-                <!-- <script type="module" src="{{ asset('js/silla.js') }}"></script> -->
+                @endif
             </div>
         </section>
     </div>

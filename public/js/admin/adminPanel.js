@@ -1,14 +1,4 @@
 document.addEventListener('DOMContentLoaded', function () {
-    const tabsContainer = document.querySelector('.tabs-container');
-
-    tabsContainer.addEventListener('mouseenter', function () {
-        this.style.width = '300px';
-    });
-
-    tabsContainer.addEventListener('mouseleave', function () {
-        this.style.width = '150px';
-    });
-
     document.getElementById("Tab2").style.display = "block";
 
     const rows = document.querySelectorAll('.row');
@@ -26,12 +16,28 @@ document.addEventListener('DOMContentLoaded', function () {
         blurUserInfo.addEventListener('click', function () {
             this.style.display = 'none';
             const userInfoDiv = document.getElementById('userInfoTemplate');
-            userInfoDiv.style.display = 'none';
+            if (userInfoDiv) {
+                userInfoDiv.style.display = 'none';
+            }
         });
     }
-    
-
 });
+
+function openTab(evt, tabName) {
+    var i, tabcontent, tablinks;
+    tabcontent = document.getElementsByClassName("tabcontent");
+    for (i = 0; i < tabcontent.length; i++) {
+        tabcontent[i].style.display = "none";
+    }
+    tablinks = document.getElementsByClassName("tablink");
+    for (i = 0; i < tablinks.length; i++) {
+        tablinks[i].classList.remove("active");
+    }
+    document.getElementById(tabName).style.display = "block";
+    if (evt.currentTarget) {
+        evt.currentTarget.classList.add("active");
+    }
+}
 
 function openTab(evt, tabName) {
     var i, tabcontent, tablinks;

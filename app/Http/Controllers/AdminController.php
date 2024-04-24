@@ -6,8 +6,8 @@ use Illuminate\Http\Request;
 use Illuminate\Routing\Controller;
 use App\Models\CustomUser;
 use Illuminate\Support\Facades\Auth;
-use Google\Client;
-use Google\Service\Calendar;
+use App\Models\Barbero;
+use App\Models\Servicio;
 
 class AdminController extends Controller
 {
@@ -28,4 +28,13 @@ class AdminController extends Controller
         Auth::logout();
         return redirect()->route('index');
     }
+
+    public function calendar()
+{
+    $users = CustomUser::all();
+    $barberos = Barbero::all(); 
+    $servicios = Servicio::all(); 
+    return view('admin.calendar', compact('users', 'barberos', 'servicios'));
+}
+
 }

@@ -1,0 +1,133 @@
+/* /////////////// CALENDARIO ////////////////// */
+
+
+:root {
+  --negro: #393939;
+  --blanco: #ececec;
+  --sombra-ppal: #c9c9c9;
+  --sombra-sec: #ffffff;
+  --azulCielo: #00fff2;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    --negro: #ececec;
+    --blanco: #303030;
+    --sombra-ppal: #242424;
+    --sombra-sec: #3c3c3c;
+    --sombra-focus: #636363;
+    --azulCielo: #00fff2;
+  }
+}
+
+body {
+  background-color: var(--blanco);
+}
+
+.card {
+  background-color: transparent !important;
+  border: none;
+}
+
+.card-body {
+  color: var(--negro);
+  border-radius: 0.5em;
+  background-color: var(--blanco);
+  box-shadow: 0.3em 0.3em 0.6em var(--sombra-ppal), -0.3em -0.3em 0.6em var(--sombra-sec);
+}
+
+.back-button {
+  cursor: pointer !important;
+  position: fixed;
+  top: 20px;
+  left: 20px;
+}
+
+.tablink {
+  color: var(--negro);
+  border-radius: 0.5em;
+  background-color: var(--blanco);
+  box-shadow: 0.3em 0.3em 0.6em var(--sombra-ppal), -0.3em -0.3em 0.6em var(--sombra-sec), inset 0 0 0 transparent, inset 0 0 0 transparent;
+  text-align: left;
+  padding: 18px 18px;
+  display: block;
+  border: none;
+  outline: none;
+  cursor: pointer;
+  margin-bottom: 10px;
+  margin-left: 20px;
+  margin-top: 20px;
+  text-decoration: none;
+}
+
+.tablink:hover {
+  background-color: var(--sombra-sec);
+}
+
+h1 {
+  color: white;
+}
+
+#calendar-container {
+  width: auto;
+  height: auto;
+}
+
+.col-md-12 {
+  width: 900px;
+}
+
+.card {
+  background-color: transparent !important;
+  border: none;
+}
+
+.fc .fc-daygrid-day.fc-day-today {
+  background-color: var(--fc-today-bg-color, rgba(0, 255, 183, 0.15));
+}
+
+.fc .fc-button-primary:not(:disabled):active,
+.fc .fc-button-primary:not(:disabled).fc-button-active {
+  background-color: var(--azulCielo);
+  color: black;
+}
+
+.fc .fc-button-primary:disabled {
+  background-color: #00fff290;
+  color: black;
+}
+
+.fc .fc-button-primary {
+  color: black;
+  background-color: #00fff297;
+}
+
+.fc .fc-button-primary:hover {
+  background-color: #00fff248;
+  color: black;
+}
+
+.fc-col-header-cell-cushion {
+  color: var(--azulCielo);
+}
+
+.fc-daygrid-day-number {
+  color: var(--azulCielo);
+}
+
+.fc-daygrid-dot-event {
+  background-color: var(--azulCielo);
+  color: rgb(0, 0, 0);
+}
+
+.fc-daygrid-dot-event:hover {
+  cursor: pointer;
+  color: black;
+  background-color: #00fff2c9;
+
+}
+
+a:hover {
+  color: var(--azulCielo);
+  cursor: not-allowed;
+}

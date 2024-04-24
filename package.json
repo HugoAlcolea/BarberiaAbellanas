@@ -6,9 +6,11 @@
         "build": "vite build"
     },
     "devDependencies": {
+        "@vitejs/plugin-vue": "^5.0.4",
         "axios": "^1.6.1",
         "laravel-vite-plugin": "^1.0.0",
-        "vite": "^5.0.0"
+        "vite": "^5.0.0",
+        "vue": "^3.4.21"
     },
     "dependencies": {
         "@fullcalendar/bootstrap": "^6.1.11",
