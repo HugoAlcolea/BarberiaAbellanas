@@ -158,33 +158,6 @@ $(document).ready(function () {
     });
 });
 
-const availableTimes = [
-    '09:00', '09:30',
-    '10:00', '10:30',
-    '11:00', '11:30',
-    '12:00', '12:30',
-    '13:00',
-    '16:00', '16:30',
-    '17:00', '17:30',
-    '18:00', '18:30',
-    '19:00', '19:30',
-    '20:00'
-];
-
-function generateTimeOptions(date) {
-    let options = '<option disabled selected>-- Selecciona una Hora --</option>';
-
-    availableTimes.forEach(time => {
-        if (isTimeAvailable(date, time)) {
-            options += `<option value="${time}">${time}</option>`;
-        } else {
-            options += `<option value="${time}" disabled>${time} (No disponible)</option>`;
-        }
-    });
-
-    return options;
-}
-
 async function isTimeAvailable(date, time) {
     const events = await getEventsForDate(date);
     const selectedTime = moment(`${date}T${time}`);
@@ -203,12 +176,13 @@ async function isTimeAvailable(date, time) {
     return true; 
 }
 
+
 let selectedDate;
 
 async function handleDateClick(info) {
     selectedDate = info.dateStr;
     $('#date').val(selectedDate);
-    $('#eventTime').html(generateTimeOptions(selectedDate));
+    $('#eventTime').val('');
     $('#eventModal').modal('hide'); 
     resetEventModal();
     $('#eventModal').modal('show');
@@ -217,21 +191,14 @@ async function handleDateClick(info) {
 async function handleDayClick(info) {
     selectedDate = info.dateStr;
     $('#date').val(selectedDate);
-    if (!$('#eventTime').val()) {
-        $('#eventTime').html(generateTimeOptions(selectedDate));
-    }
-    $('#eventModal').modal('hide'); 
+    $('#eventTime').val('');
+    $('#eventModal').modal('hide');
     resetEventModal();
-    $('#eventModal').modal('show'); 
+    $('#eventModal').modal('show');
 }
 
-function resetEventModal() {
-    $('#eventId').val('');
-    $('#eventName').val('');
-    $('#eventTime').val('');
-    $('#eventDescription').val('');
-    $('#deleteEventBtn').hide();
-}
+
+
 
 async function createEvent(eventData) {
     try {
@@ -285,8 +252,13 @@ function handleEventClick(info) {
     $('#eventDescription').val(event.extendedProps.description || '');
     $('#date').val(selectedDate);
     const eventTime = moment(event.start).format('HH:mm');
-    $('#eventTime').html(generateTimeOptions(selectedDate));
     $('#eventTime').val(eventTime);
+
+    $('#userSelect').val(event.extendedProps.userId);
+
+    $('#barberoSelect').val(event.extendedProps.barberoId);
+
+    $('#servicioSelect').val(event.extendedProps.servicioId);
 
     if (event.id) {
         $('#deleteEventBtn').show();
@@ -296,6 +268,7 @@ function handleEventClick(info) {
 
     $('#eventModal').modal('show');
 }
+
 
 async function submitEventFormData() {
     const token = getCookie('token_user');
@@ -314,7 +287,6 @@ async function submitEventFormData() {
 
     const userName = $('#userSelect option:selected').text();
     const barberName = $('#barberoSelect option:selected').text();
-
     const servicioName = $('#servicioSelect option:selected').text();
 
     const description = `Barbero: ${barberName}, Servicio: ${servicioName}`;
@@ -333,7 +305,17 @@ async function submitEventFormData() {
     };
 
     try {
-        if (!(await isTimeAvailable(eventId, selectedDateTime, selectedDateTime.clone().add(30, 'minutes')))) {
+        const events = await getEventsForDate(selectedDate);
+        const isAvailable = events.every(event => {
+            const eventStart = moment(event.start.dateTime);
+            const eventEnd = moment(event.end.dateTime);
+            return !(
+                selectedDateTime.isBetween(eventStart, eventEnd, null, '[)') ||
+                selectedDateTime.clone().add(30, 'minutes').isBetween(eventStart, eventEnd, null, '(]')
+            );
+        });
+
+        if (!isAvailable) {
             alert('La hora seleccionada no está disponible. Por favor, elige otra hora.');
             return;
         }
@@ -350,6 +332,8 @@ async function submitEventFormData() {
         alert('Ocurrió un error al guardar el evento.');
     }
 }
+
+
 
 async function getEventsForDate(date) {
     try {
@@ -405,22 +389,23 @@ async function handleToken(token) {
     }
 }
 
-$('#eventModal').on('shown.bs.modal', function () {
-    const eventId = $('#eventId').val();
+$(document).ready(function () {
+    $('#eventModal').on('shown.bs.modal', function () {
+        $('#userSelect').val('');
+        $('#barberoSelect').val('');
+        $('#servicioSelect').val('');
+    });
 
-    if (!eventId) {
+    $('#eventModal').on('hide.bs.modal', function () {
+        resetEventModal();
+    });
+});
+
+    function resetEventModal() {
+        $('#eventId').val('');
         $('#eventName').val('');
         $('#eventDescription').val('');
-        $('#eventTime').html(generateTimeOptions(selectedDate));
+        $('#eventTime').val('');
         $('#date').val('');
         $('#deleteEventBtn').hide();
     }
-});
-
-$('#eventModal').on('hide.bs.modal', function () {
-    $('#eventName').val('');
-    $('#eventDescription').val('');
-    $('#eventTime').val('');
-    $('#date').val('');
-    $('#deleteEventBtn').hide();
-});

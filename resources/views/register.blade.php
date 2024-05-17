@@ -48,11 +48,11 @@
                             <div class="step">
                                 <div class="input-group">
                                     <label for="name">Nombre:</label>
-                                    <input type="text" id="name" name="name" required>
+                                    <input type="text" id="name" name="name" value="{{ $user->name }}" required>
                                 </div>
                                 <div class="input-group">
                                     <label for="surname">Apellido:</label>
-                                    <input type="text" id="surname" name="surname" required>
+                                    <input type="text" id="surname" name="surname" value="{{ $user->surname }}" required>
                                 </div>
                             </div>
 
@@ -74,7 +74,7 @@
                             <div class="step">
                                 <div class="input-group">
                                     <label for="email">Correo electrónico:</label>
-                                    <input type="email" id="email" name="email" required>
+                                    <input type="email" id="email" name="email" value="{{ $user->email }}" required>
                                 </div>
                                 <div class="input-group">
                                     <label for="password">Contraseña:</label>

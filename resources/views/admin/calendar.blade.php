@@ -7,9 +7,9 @@
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/fullcalendar@5.11.5/main.css">
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.29.1/moment.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet"
         integrity="sha384-1BmE4kWBq78iYhFldvKuhfTAU6auU8tT94WrHftjDbrCEXSU1oBoqyl2QvZ6jIW3" crossorigin="anonymous">
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.min.js"
         integrity="sha384-QJHtvGhmr9XOIpI6YVutG+2QOK9T+ZnN4kzFN1RtK3zEFEIsxhlmWl5/YESvpZ13" crossorigin="anonymous">
     </script>
@@ -50,7 +50,8 @@
                     <div>
                         <input type="hidden" id="eventId">
                         <label for="userSelect">Usuario:</label>
-                        <select class="form-control" id="userSelect">
+                        <select class="form-select" id="userSelect">
+                            <option value="" selected disabled>-- Selecciona un Usuario --</option>
                             @foreach($users as $user)
                             <option value="{{ $user->id }}">{{ $user->name }} {{ $user->surname }}</option>
                             @endforeach
@@ -58,11 +59,33 @@
                     </div>
                     <div>
                         <label for="eventTime">Event Time</label>
-                        <select class="form-control" id="eventTime" name="eventTime" required></select>
+                        <select class="form-select" id="eventTime" name="eventTime" required>
+                            <option value="" selected disabled>-- Selecciona una hora --</option>
+                            <option value="09:00">09:00</option>
+                            <option value="09:30">09:30</option>
+                            <option value="10:00">10:00</option>
+                            <option value="10:30">10:30</option>
+                            <option value="11:00">11:00</option>
+                            <option value="11:30">11:30</option>
+                            <option value="12:00">12:00</option>
+                            <option value="12:30">12:30</option>
+                            <option value="13:00">13:00</option>
+                            <option value="" disabled>-- Horas de la Tarde --</option>
+                            <option value="16:00">16:00</option>
+                            <option value="16:30">16:30</option>
+                            <option value="17:00">17:00</option>
+                            <option value="17:30">17:30</option>
+                            <option value="18:00">18:00</option>
+                            <option value="18:30">18:30</option>
+                            <option value="19:00">19:00</option>
+                            <option value="19:30">19:30</option>
+                            <option value="20:00">20:00</option>
+                        </select>
                     </div>
                     <div>
                         <label for="barberoSelect">Barbero:</label>
-                        <select class="form-control" id="barberoSelect">
+                        <select class="form-select" id="barberoSelect">
+                            <option value="" selected disabled>-- Selecciona un Barbero --</option>
                             @foreach($barberos as $barbero)
                             <option value="{{ $barbero->id }}">{{ $barbero->nombre }}</option>
                             @endforeach
@@ -70,7 +93,8 @@
                     </div>
                     <div>
                         <label for="servicioSelect">Servicio:</label>
-                        <select class="form-control" id="servicioSelect">
+                        <select class="form-select" id="servicioSelect">
+                            <option value="" selected disabled>-- Selecciona un Servicio --</option>
                             @foreach($servicios as $servicio)
                             <option value="{{ $servicio->id }}">{{ $servicio->nombre }}</option>
                             @endforeach

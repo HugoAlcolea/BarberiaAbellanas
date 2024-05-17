@@ -80,12 +80,6 @@ body {
 
 }
 
-.error-message {
-    color: #ff0000;
-    margin-top: -40px;
-    margin-bottom: 40px;
-}
-
 .back-button {
     position: absolute;
     top: 30px;
@@ -114,7 +108,12 @@ p {
 
 }
 
+.selectMax {
+    width: 95% !important;
+}
+
 .input-group {
+    width: 100%;
     display: flex;
     flex-direction: column;
     align-items: flex-start;
@@ -143,15 +142,6 @@ input:focus {
     border: 4px solid #00fff2;
     box-shadow: 0 0 4px #00fff2;
     outline: none;
-}
-
-.google-login {
-    text-align: center;
-}
-
-.google-logo {
-    width: 64px;
-    height: 64px;
 }
 
 .button-group {

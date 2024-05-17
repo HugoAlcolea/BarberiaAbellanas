@@ -8,7 +8,6 @@
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
     <link rel="stylesheet" href="{{ asset('css/index.css') }}">
     <script src="{{ asset('js/index.js') }}"></script>
-
 </head>
 
 <body>
@@ -59,10 +58,11 @@
 
                     @else
                     <li class="nav-item">
-                        <div class="nav-link-group">
-                            <a class="nav-link" href="{{ route('login') }}" data-text="Login">Login</a>
-                            <span class="nav-link-divider"> / </span>
-                            <a class="nav-link" href="{{ route('register') }}" data-text="Register">Register</a>
+                        <div class="nav-link" data-text="Login">
+                            <a href="{{ route('login') }}" class="text-white">
+                                <ion-icon name="log-in-outline"></ion-icon>
+                                <span class="nav-text">Login</span>
+                            </a>
                         </div>
                     </li>
                     @endif
@@ -80,7 +80,7 @@
                 <h2>Bienvenido a Barberia Abel·lanas</h2>
                 <p>El mejor lugar para cuidar de tu barba y cabello.</p>
                 @if(Auth::check())
-                <a href="#" class="btn btn-primary">Reservar cita</a>
+                <a href="{{ route('cita.formulario') }}" class="btn btn-primary">Reservar cita</a>
                 @endif
             </div>
         </section>
@@ -147,8 +147,12 @@
         </div>
 
         <div id="settings" class="tabcontent">
-            <h3>Contenido de la pestaña Settings</h3>
-            <p>Este es el contenido de la pestaña Settings.</p>
+            <div class="center-box">
+                <div class="box">
+                    <span></span>
+                    <div class="container"></div>
+                </div>
+            </div>
         </div>
 
 

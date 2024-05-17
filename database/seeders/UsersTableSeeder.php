@@ -2,7 +2,6 @@
 
 namespace Database\Seeders;
 
-use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\Hash;
 use App\Models\CustomUser;
@@ -19,68 +18,126 @@ class UsersTableSeeder extends Seeder
      */
     public function run()
     {
-        // Crear usuarios normales
-        $this->createUser('hugo', 'alcolea', 'hugoalcolea', '696045259', '2004-10-06', 'hombre', 'hugo@gmail.com', 'hugoalcolea.jpg', false, 26, 696969);
-        $this->createUser('pueva', 'definiva', 'puevadefiniva', '123456789', '2000-01-01', 'hombre', 'puevadefiniva@gmail.com', 'default.jpg', false, 1, 1);
-
-        // Crear usuario administrador
-        $this->createUser('admin', 'admin', 'admin', '000000000', '1000-01-01', 'hombre', 'admin@gmail.com', 'noelnovo.jpeg', true, 1000, 0);
-
-        // Crear usuarios adicionales con datos inventados
-        $this->createUser('Dumas', 'Dumas', 'dumasdumas', '555555555', '1980-05-15', 'hombre', 'dumas@dumas.com', 'dumasdumas.jpg', false, 5, 10);
-        $this->createUser('John', 'Doe', 'john.doe', '123456789', '1990-12-25', 'hombre', 'john@doe.com', 'admin.jpeg', false, 10, 20);
-        $this->createUser('Jane', 'Doe', 'jane.doe', '987654321', '1985-08-10', 'mujer', 'jane@doe.com', 'default.jpg', false, 15, 30);
-        $this->createUser('Bob', 'Smith', 'bob.smith', '555123456', '1975-03-20', 'hombre', 'bob@smith.com', 'hugoalcolea.jpg', false, 20, 40);
-
-        // Crear barberos
-        $this->createBarbero('Barbero 1', 'Descripción del barbero 1', 'barbero1.jpg', 'Horario del barbero 1');
-        // Agrega más barberos si lo deseas
-
-        // Crear servicios
-        $this->createServicio('Corte de pelo', 'Descripción del servicio de corte de pelo', 10.00, 30);
-        // Agrega más servicios si lo deseas
-    }
-
-    private function createUser($name, $surname, $username, $phone, $date_of_birth, $gender, $email, $profile_image, $is_admin, $haircuts, $points)
-    {
-        $user = CustomUser::create([
-            'name' => $name,
-            'surname' => $surname,
-            'username' => $username,
-            'phone' => $phone,
-            'date_of_birth' => $date_of_birth,
-            'gender' => $gender,
-            'email' => $email,
-            'password' => Hash::make($username), // Usando el nombre de usuario como contraseña temporal
-            'confirm_password' => Hash::make($username),
-            'profile_image' => $profile_image,
-            'is_admin' => $is_admin,
+        // Crear usuarios
+        $hugo = CustomUser::create([
+            'name' => 'hugo',
+            'surname' => 'alcolea',
+            'username' => 'hugoalcolea',
+            'phone' => '696045259',
+            'date_of_birth' => '2004-10-06',
+            'gender' => 'hombre',
+            'email' => 'hugo@gmail.com',
+            'password' => Hash::make('hugoalcolea'),
+            'confirm_password' => Hash::make('hugoalcolea'),
+            'profile_image' => 'hugoalcolea.jpg',
+            'is_admin' => false,
+            'google_id' => null,
         ]);
 
         StatsUser::create([
-            'user_id' => $user->id,
-            'haircuts' => $haircuts,
-            'points' => $points,
+            'user_id' => $hugo->id,
+            'haircuts' => 26,
+            'points' => 696969,
         ]);
-    }
 
-    private function createBarbero($nombre, $descripcion, $imagen, $horario)
-    {
-        Barbero::create([
-            'nombre' => $nombre,
-            'descripcion' => $descripcion,
-            'imagen' => $imagen,
-            'horario' => $horario,
+        $pueva = CustomUser::create([
+            'name' => 'pueva',
+            'surname' => 'definiva',
+            'username' => 'puevadefiniva',
+            'phone' => '123456789',
+            'date_of_birth' => '2000-01-01',
+            'gender' => 'hombre',
+            'email' => 'puevadefiniva@gmail.com',
+            'password' => Hash::make('puevadefiniva'),
+            'confirm_password' => Hash::make('puevadefiniva'),
+            'profile_image' => 'default.jpg',
+            'is_admin' => false,
+            'google_id' => null,
         ]);
-    }
 
-    private function createServicio($nombre, $descripcion, $precio, $duracion)
-    {
-        Servicio::create([
-            'nombre' => $nombre,
-            'descripcion' => $descripcion,
-            'precio' => $precio,
-            'duracion' => $duracion,
+        StatsUser::create([
+            'user_id' => $pueva->id,
+            'haircuts' => 1,
+            'points' => 1,
+        ]);
+
+        $admin = CustomUser::create([
+            'name' => 'admin',
+            'surname' => 'admin',
+            'username' => 'admin',
+            'phone' => '000000000',
+            'date_of_birth' => '1000-01-01',
+            'gender' => 'hombre',
+            'email' => 'admin@gmail.com',
+            'password' => Hash::make('admin'),
+            'confirm_password' => Hash::make('admin'),
+            'profile_image' => 'noelnovo.jpeg',
+            'is_admin' => true,
+            'google_id' => null,
+        ]);
+
+        StatsUser::create([
+            'user_id' => $admin->id,
+            'haircuts' => 1000,
+            'points' => 0,
+        ]);
+
+        $dumas = CustomUser::create([
+            'name' => 'Dumas',
+            'surname' => 'Dumas',
+            'username' => 'dumasdumas',
+            'phone' => '555555555',
+            'date_of_birth' => '1980-05-15',
+            'gender' => 'hombre',
+            'email' => 'dumas@dumas.com',
+            'password' => Hash::make('dumasdumas'),
+            'confirm_password' => Hash::make('dumasdumas'),
+            'profile_image' => 'dumasdumas.jpg',
+            'is_admin' => false,
+            'google_id' => null,
+        ]);
+
+        StatsUser::create([
+            'user_id' => $dumas->id,
+            'haircuts' => 5,
+            'points' => 10,
+        ]);
+
+        // Crear barberos
+        $barbero1 = Barbero::create([
+            'nombre' => 'Barbero 1',
+            'descripcion' => 'Descripción del barbero 1',
+            'imagen' => 'barbero1.jpg',
+            'horario' => 'Horario del barbero 1',
+        ]);
+
+        $barbero2 = Barbero::create([
+            'nombre' => 'Barbero 2',
+            'descripcion' => 'Descripción del barbero 2',
+            'imagen' => 'barbero2.jpg',
+            'horario' => 'Horario del barbero 2',
+        ]);
+
+        // Crear servicios
+        $cortePelo = Servicio::create([
+            'nombre' => 'Corte de pelo',
+            'descripcion' => 'Descripción del servicio de corte de pelo',
+            'precio' => 10.00,
+            'duracion' => 30,
+        ]);
+
+        $corteBarba = Servicio::create([
+            'nombre' => 'Corte de barba',
+            'descripcion' => 'Descripción del servicio de corte de barba',
+            'precio' => 15.00,
+            'duracion' => 45,
+        ]);
+
+        $cortePeloBarba = Servicio::create([
+            'nombre' => 'Corte de pelo y barba',
+            'descripcion' => 'Descripción del servicio de corte de pelo y barba',
+            'precio' => 20.00,
+            'duracion' => 60,
         ]);
     }
 }
