@@ -1,7 +1,5 @@
 <?php
 
-// En el modelo CustomUser.php
-
 namespace App\Models;
 
 use Illuminate\Contracts\Auth\Authenticatable;
@@ -16,10 +14,8 @@ class CustomUser extends Model implements Authenticatable
 
     protected $table = 'custom_users';
 
-    
-
     protected $fillable = [
-        'name', 'surname', 'username', 'phone', 'date_of_birth', 'email', 'password','google_id', 'gender', 'profile_image',
+        'name', 'surname', 'username', 'phone', 'date_of_birth', 'email', 'password', 'google_id', 'gender', 'profile_image', 'is_admin',
     ];
 
     public function stats()
@@ -27,13 +23,21 @@ class CustomUser extends Model implements Authenticatable
         return $this->hasOne(StatsUser::class, 'user_id');
     }
 
-    /**
-     * Verifica si el usuario es administrador.
-     *
-     * @return bool
-     */
     public function isAdmin()
     {
         return $this->is_admin;
     }
+
+    public function deleteUser($id)
+    {
+        try {
+            $user = CustomUser::findOrFail($id);
+            $user->delete();
+
+            return response()->json(['message' => 'Usuario eliminado correctamente']);
+        } catch (\Exception $e) {
+            return response()->json(['message' => 'Error al eliminar el usuario', 'error' => $e->getMessage()], 500);
+        }
+    }
 }
+

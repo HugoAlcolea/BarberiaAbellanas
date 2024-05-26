@@ -1,0 +1,29 @@
+.ticket {
+    font-family: Arial, sans-serif;
+    max-width: 300px;
+    margin: 0 auto;
+    padding: 20px;
+    border: 2px solid #ccc;
+    border-radius: 10px;
+    background-color: #f9f9f9;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+}
+
+h1 {
+    font-size: 24px;
+    color: #333;
+    text-align: center;
+}
+
+p {
+    margin: 10px 0;
+    font-size: 16px;
+    color: #666;
+}
+
+.codigo {
+    font-size: 24px;
+    font-weight: bold;
+    text-align: center;
+    color: #ff0000; 
+}

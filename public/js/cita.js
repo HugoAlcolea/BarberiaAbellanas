@@ -70,10 +70,23 @@ document.addEventListener('DOMContentLoaded', function () {
         };
 
         if (accessToken) {
-            insertEvent(accessToken, eventDetails);
+            insertEvent(accessToken, eventDetails)
+                .then((success) => {
+                    if (success) {
+                        document.getElementById('processing-message').style.display = 'none';
+                        document.getElementById('download-form').style.display = 'block';
+                        document.getElementById('cita-form').style.display = 'none';
+                    } else {
+                        document.getElementById('processing-message').style.display = 'block';
+                    }
+                })
+                .catch((error) => {
+                    console.error('Error al insertar el evento:', error);
+                });
         } else {
             console.error('El token de acceso no está disponible.');
         }
+        
     });
 });
 
@@ -81,7 +94,7 @@ async function insertEvent(accessToken, eventDetails) {
     try {
         if (!gapi.client || !gapi.client.calendar) {
             console.error('La API de cliente de Google no está inicializada.');
-            return;
+            return false;
         }
 
         gapi.client.setToken({ access_token: accessToken });
@@ -103,6 +116,7 @@ async function insertEvent(accessToken, eventDetails) {
 
         if (events.length > 0) {
             alert('Ya hay un evento programado en esa hora.');
+            return false;
         } else {
             const insertResponse = await gapi.client.calendar.events.insert({
                 'calendarId': CALENDAR_ID,
@@ -110,7 +124,7 @@ async function insertEvent(accessToken, eventDetails) {
             });
 
             if (insertResponse.status === 200) {
-                alert('Cita programada exitosamente');
+                return true;
             } else {
                 throw new Error('Hubo un error al programar la cita');
             }
@@ -118,6 +132,6 @@ async function insertEvent(accessToken, eventDetails) {
     } catch (error) {
         alert('Hubo un error al programar la cita');
         console.error('Error al programar la cita:', error);
+        return false;
     }
 }
-

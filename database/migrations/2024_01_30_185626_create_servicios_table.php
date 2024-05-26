@@ -18,7 +18,7 @@ class CreateServiciosTable extends Migration
             $table->string('nombre');
             $table->text('descripcion');
             $table->decimal('precio', 8, 2);
-            $table->integer('duracion'); // En minutos
+            $table->integer('duracion');
             $table->timestamps();
         });
     }

@@ -35,13 +35,12 @@
 
                     <div class="error-message" id="error-messages">
                         @if($errors->any())
-                            @foreach ($errors->all() as $error)
-                                {{ $error }}<br>
-                            @endforeach
+                        @foreach ($errors->all() as $error)
+                        {{ $error }}<br>
+                        @endforeach
                         @endif
                     </div>
 
-                    <!-- Formulario de Registro en Pasos -->
                     <div class="form-steps">
                         <form action="{{ route('register.post') }}" method="post" enctype="multipart/form-data">
                             @csrf
@@ -52,7 +51,8 @@
                                 </div>
                                 <div class="input-group">
                                     <label for="surname">Apellido:</label>
-                                    <input type="text" id="surname" name="surname" value="{{ $user->surname }}" required>
+                                    <input type="text" id="surname" name="surname" value="{{ $user->surname }}"
+                                        required>
                                 </div>
                             </div>
 
@@ -85,7 +85,7 @@
                                     <input type="password" id="confirm_password" name="confirm_password" required>
                                 </div>
                             </div>
-                            
+
                             <div class="step">
                                 <br><br>
                                 <div class="input-group">
@@ -100,28 +100,30 @@
 
                             <div class="step">
                                 <div class="input-group">
-                                    <img id="image-preview" src="#" alt="Vista previa de la imagen" style="display: none; max-width: 125px; max-height: 125px; border-radius: 50%; margin: 10px auto 10px; display: block;">
+                                    <img id="image-preview" src="#" alt="Vista previa de la imagen"
+                                        style="display: none; max-width: 125px; max-height: 125px; border-radius: 50%; margin: 10px auto 10px; display: block;">
                                     <br>
                                     <label for="profile_image">Imagen de perfil:</label>
-                                    <input style="color: white" type="file" id="profile_image" name="profile_image" accept="image/*" onchange="previewImage(this)">
+                                    <input style="color: white" type="file" id="profile_image" name="profile_image"
+                                        accept="image/*" onchange="previewImage(this)">
                                 </div>
                             </div>
 
                             <script>
-                                function previewImage(input) {
-                                    var preview = document.getElementById('image-preview');
-                                    var file = input.files[0];
-                                    var reader = new FileReader();
+                            function previewImage(input) {
+                                var preview = document.getElementById('image-preview');
+                                var file = input.files[0];
+                                var reader = new FileReader();
 
-                                    reader.onload = function (e) {
-                                        preview.src = e.target.result;
-                                        preview.style.display = 'block';
-                                    };
+                                reader.onload = function(e) {
+                                    preview.src = e.target.result;
+                                    preview.style.display = 'block';
+                                };
 
-                                    if (file) {
-                                        reader.readAsDataURL(file);
-                                    }
+                                if (file) {
+                                    reader.readAsDataURL(file);
                                 }
+                            }
                             </script>
 
                             <div class="buttons">

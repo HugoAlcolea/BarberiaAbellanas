@@ -14,9 +14,9 @@ use Illuminate\Support\Facades\Auth;
 | Web Routes
 |--------------------------------------------------------------------------
 |
-| Here is where you can register web routes for your application. These
-| routes are loaded by the RouteServiceProvider and all of them will
-| be assigned to the "web" middleware group. Make something great!
+| Here is where you can register web routes for your application.
+| These routes are loaded by the RouteServiceProvider within a group which
+| contains the "web" middleware group. Now create something great!
 |
 */
 
@@ -30,12 +30,10 @@ Route::get('/google-auth/redirect', function () {
 Route::get('/google-auth/callback', function () {
     $user_google = Socialite::driver('google')->stateless()->user();
     
-    // Divide el nombre completo en nombre y apellido
     $nameParts = explode(' ', $user_google->name);
     $firstName = $nameParts[0];
     $lastName = isset($nameParts[1]) ? $nameParts[1] : '';
 
-    // Buscar o crear el usuario
     $user = CustomUser::updateOrCreate([
         'google_id' => $user_google->id,
     ],[
@@ -50,7 +48,6 @@ Route::get('/google-auth/callback', function () {
 
         Auth::login($user);
 
-        // Crear la fila en stats_users
         $statsUser = new StatsUser();
         $statsUser->user_id = $user->id;
         $statsUser->haircuts = 0;
@@ -60,14 +57,13 @@ Route::get('/google-auth/callback', function () {
         return redirect()->route('register', ['id' => $user->id]);
     } else {
         Auth::login($user);
-        // $cookie = cookie()->forever('token_user', $user_google->token);
-        // return redirect()->route('index')->withCookie($cookie);
-        return redirect()->route('index');
+        if ($user->is_admin) {
+            return redirect()->route('admin.mainTable');
+        } else {
+            return redirect()->route('index');
+        }
     }
 });
-
-
-
 
 // Rutas de register
 Route::get('/register', [CustomUserController::class, 'showRegistrationForm'])->name('register');
@@ -77,7 +73,6 @@ Route::post('/register', [CustomUserController::class, 'register'])->name('regis
 // Rutas de login
 Route::get('/login', [CustomUserController::class, 'showLoginForm'])->name('login');
 Route::post('/login', [CustomUserController::class, 'login'])->name('login.post');
-Route::get('/admin-panel', [AdminController::class, 'index'])->name('admin.mainTable');
 
 // Rutas de Principal
 Route::get('/principal', function () {
@@ -86,24 +81,41 @@ Route::get('/principal', function () {
 
 // Rutas de Citas
 Route::get('/cita', [CustomUserController::class, 'mostrarFormularioCita'])->name('cita.formulario');
+Route::post('/guardar-cita', [CustomUserController::class, 'guardarCita'])->name('guardar.cita');
+Route::post('/descargar-pdf/{cita}', [CustomUserController::class, 'descargarPDF'])->name('descargar.pdf');
 Route::get('/auth/google-calendar', [CustomUserController::class, 'authenticateWithGoogleCalendar'])->name('auth.google-calendar');
-
 
 // Rutas de Perfil
 Route::get('/principal/perfil', [CustomUserController::class, 'showPerfil'])->name('perfil');
+
 // Rutas de Fotos
-Route::get('/principal/fotos', [CustomUserController::class, 'showFotos'])->name('fotos');
+Route::get('/filterImage', [CustomUserController::class, 'filterImage'])->name('filterImage');
+
 
 // Rutas de Settings
 Route::get('/principal/settings', [CustomUserController::class, 'showSettings'])->name('settings');
+Route::post('/update_profile', [CustomUserController::class, 'updateProfile'])->name('update_profile');
+Route::post('/delete-account', [CustomUserController::class, 'deleteAccount'])->name('delete_account');
+
+// Rutas de Logout
 Route::get('/logout', function () {
     Auth::logout();
     return redirect()->route('index')->withCookie(Cookie::forget('token_user'));
 })->name('logout');
 
-
-
 // Rutas Admin
-Route::get('/admin/user/{id}', [AdminController::class, 'getUserInfo'])->name('admin.user.info');
-Route::get('/logout', [AdminController::class, 'logout'])->name('logout');
-Route::get('/admin/calendar', [AdminController::class, 'calendar'])->name('admin.calendar');
+Route::middleware(['auth', 'admin'])->group(function () {
+    Route::get('/admin-panel', [AdminController::class, 'index'])->name('admin.mainTable');
+    Route::get('/admin/user/{id}', [AdminController::class, 'getUserInfo'])->name('admin.user.info');
+    Route::get('/admin/search-users', [AdminController::class, 'searchUsers'])->name('admin.search.users');
+    Route::post('/admin/user/{id}', [AdminController::class, 'updateUser'])->name('admin.user.update');
+    Route::delete('/admin/user/{id}', 'AdminController@deleteUser')->name('admin.delete_user');
+    Route::delete('/admin/delete-photo/{photoId}', [AdminController::class, 'deletePhoto'])->name('admin.delete_photo');
+    Route::get('/admin/calendar', [AdminController::class, 'calendar'])->name('admin.calendar');
+    Route::post('/admin/upload-photo', [AdminController::class, 'uploadPhoto'])->name('admin.upload-photo');
+    Route::post('/admin/facturacion', [AdminController::class, 'processFacturacion'])->name('admin.facturacion');
+    Route::post('/descargar-facturacion', [AdminController::class, 'generarPDF'])->name('admin.descargarFacturacion');
+    Route::get('/admin-logout', [AdminController::class, 'logout'])->name('admin.logout');
+});
+
+

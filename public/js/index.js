@@ -1,5 +1,3 @@
-// /* index.js */
-
 document.addEventListener("DOMContentLoaded", function() {
     const tabs = document.querySelectorAll(".nav-link");
     const tabContents = document.querySelectorAll(".tabcontent");
@@ -18,6 +16,8 @@ document.addEventListener("DOMContentLoaded", function() {
     function handleTabClick(tab) {
         const tabId = tab.getAttribute("data-text").toLowerCase();
         showTab(tabId);
+
+        localStorage.setItem("lastTab", tabId);
     }
 
     tabs.forEach(tab => {
@@ -26,5 +26,15 @@ document.addEventListener("DOMContentLoaded", function() {
         });
     });
 
-    showTab("home");
+    function showLastTab() {
+        const lastTab = localStorage.getItem("lastTab");
+        if (lastTab) {
+            showTab(lastTab);
+        } else {
+            showTab("home");
+        }
+    }
+
+    showLastTab();
+
 });

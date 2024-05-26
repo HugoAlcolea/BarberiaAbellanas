@@ -4,6 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="csrf-token" content="{{ csrf_token() }}">
     <title>Solicitar cita</title>
 
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet">
@@ -11,6 +12,7 @@
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.29.1/moment.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.4.0/jspdf.umd.min.js"></script>
 
     <link rel="stylesheet" href="{{ asset('css/formulario_cita.css') }}">
 </head>
@@ -22,13 +24,15 @@
             <a href="{{ route('index') }}" class="back-button">
                 <img src="{{ asset('img/arrow-icon.png') }}" alt="Volver al inicio">
             </a>
-            <div class="container">
+            <div class="container" id="main-container">
                 <h1>Solicitar cita</h1>
 
-                <form id="cita-form">
+                <form id="cita-form" action="{{ route('guardar.cita') }}" method="POST">
+                    @csrf
                     <input type="hidden" id="google-calendar-access-token" value="{{ $accessToken }}">
                     <input type="hidden" id="nombreUsuario" name="nombreUsuario" value="{{ Auth::user()->name }}">
-                    <input type="hidden" id="apellidoUsuario" name="apellidoUsuario" value="{{ Auth::user()->surname }}">
+                    <input type="hidden" id="apellidoUsuario" name="apellidoUsuario"
+                        value="{{ Auth::user()->surname }}">
                     <div class="input-group">
                         <label for="fecha">Fecha:</label>
                         <input type="date" id="fecha" name="fecha" min="<?php echo date('Y-m-d'); ?>" required>
@@ -80,12 +84,22 @@
                         <button type="submit" class="small-button" id="saveChangesBtn">Enviar</button>
                     </div>
                 </form>
+                <div id="processing-message" style="display: none;">
+                    <p>Procesando solicitud...</p>
+                </div>
+                <div id="download-form" style="display: none;">
+                    <form id="download-form" action="{{ route('descargar.pdf', ['cita' => $cita->id]) }}" method="POST">
+                        @csrf
+                        <button type="submit" class="small-button" id="downloadBtn">Descargar PDF</button>
+                    </form>
+                    <p>Este proceso peude tardar unos 20seg, espere porfavor</p>
+                    <h3>Para cancelar la cita pongase en contacto con el Barbero</h3>
+                </div>
             </div>
         </div>
     </div>
 
 
-    <!-- Cargar la API de Google Client -->
     <script async defer src="https://apis.google.com/js/api.js" onload="gapiLoaded()"></script>
     <script async defer src="https://accounts.google.com/gsi/client" onload="gisLoaded()"></script>
     <script src="{{ asset('js/cita.js') }}"></script>

@@ -19,6 +19,7 @@
 
 body {
   background-color: var(--blanco);
+  font-family: "Poppins", sans-serif !important;
 }
 
 
@@ -87,7 +88,6 @@ body {
   margin-right: 20px;
 }
 
-/* Media query para pantallas de tamaño medio */
 @media only screen and (max-width: 768px) {
   .tabcontent-container {
       width: calc(100% - 30px);
@@ -99,10 +99,11 @@ body {
 
 
 .tabcontent {
+  width: 70%;
   display: none;
   padding: 20px;
   position: fixed;
-  margin-left: 150px;
+  margin-left: 50px;
 }
 
 .tabcontent h3 {
@@ -155,7 +156,7 @@ body {
   max-height: 50vh; 
 }
 
-.row {
+.row-table-scroll {
   position: relative; 
   display: flex;
   align-items: center;
@@ -164,9 +165,8 @@ body {
   box-shadow: 0.3em 0.3em 0.6em var(--sombra-ppal), -0.3em -0.3em 0.6em var(--sombra-sec);
   margin-bottom: 2%;
   width: 96%; 
-  margin: 2% auto; 
+  margin: 2% auto;
   cursor: pointer;
-  transform: translateY(100%); 
   transition: transform 0.5s ease;
 }
 
@@ -178,7 +178,6 @@ body {
 }
 
 
-/* Agrega esto al final de tus estilos CSS */
 
 @media only screen and (max-width: 768px) {
   .table-header > div {
@@ -187,7 +186,7 @@ body {
     margin-left: 10px;
   }
 
-  .row {
+  .row-table-scroll {
     flex-direction: column;
     height: auto; 
     margin-bottom: 5px; 
@@ -214,11 +213,14 @@ body {
   width: 70%;
   height: auto;
   border-radius: 0.5em;
-  background-color: var(--blanco);
-  box-shadow: 0.3em 0.3em 0.6em var(--sombra-ppal), -0.3em -0.3em 0.6em var(--sombra-sec);
-  padding: 2em;
   margin-bottom: 2%;
-  margin: 2% auto;
+}
+
+.photo-preview1 img {
+  display: block;
+  max-width: 100px;
+  height: auto;
+  border-radius: 20px;
 }
 
 
@@ -238,8 +240,8 @@ body {
 
 .user-info-container {
   position: fixed;
-  width: 300px;
-  height: 600px;
+  width: 800px;
+  height: 700px;
   border-radius: 0.5em;
   background-color: var(--blanco);
   box-shadow: 0.3em 0.3em 0.6em var(--sombra-ppal), -0.3em -0.3em 0.6em var(--sombra-sec);
@@ -252,21 +254,47 @@ body {
 }
 
 .user-info-container img {
-  max-width: 100%;
-  height: auto;
+  max-width: 200px;
+  max-height: 200px;
   border-radius: 50%; 
 }
 
-.user-info-container img:hover {
-  filter: blur(5px);
+.btn-primary {
+  background-color: rgb(0, 255, 0);
+  color: black;
+  border-color: rgb(0, 255, 0);
+}
+
+.btn-primary:hover {
+  background-color: rgb(0, 183, 0);
+  color: black;
+  border-color:rgb(0, 183, 0);
+}
+/* //////////////////// Fotos //////////////////////// */
+
+.photo-preview img {
+  display: block;
+  max-width: 200px;
+  height: auto;
+  border-radius: 20px;
+}
+
+.scrollable-gallery {
+  max-height: 600px;
+  max-width: 900px;
+  overflow-y: auto;
+  overflow-x: auto;
+
 }
 
 
-.img-edit {
-  position: absolute;
-  top: 20%;
-  left: calc(50% - 32px);
-  display: none;
-  height: 64px;
-  width: 64px;
+/* ////////////////////// Facturacion //////////////////////////// */
+
+.custom-table-wrapper {
+  max-height: 600px;
+  overflow-y: auto;
+}
+
+.custom-table {
+  width: 100%;
 }

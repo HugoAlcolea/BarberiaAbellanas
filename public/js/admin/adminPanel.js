@@ -1,5 +1,5 @@
 document.addEventListener('DOMContentLoaded', function () {
-    document.getElementById("Tab2").style.display = "block";
+    document.getElementById("Tab1").style.display = "block";
 
     const rows = document.querySelectorAll('.row');
     const tableScroll = document.querySelector('.table-scroll');
@@ -34,78 +34,202 @@ function openTab(evt, tabName) {
         tablinks[i].classList.remove("active");
     }
     document.getElementById(tabName).style.display = "block";
-    if (evt.currentTarget) {
-        evt.currentTarget.classList.add("active");
-    }
-}
-
-function openTab(evt, tabName) {
-    var i, tabcontent, tablinks;
-    tabcontent = document.getElementsByClassName("tabcontent");
-    for (i = 0; i < tabcontent.length; i++) {
-        tabcontent[i].style.display = "none";
-    }
-    tablinks = document.getElementsByClassName("tablink");
-    for (i = 0; i < tablinks.length; i++) {
-        tablinks[i].classList.remove("active");
-    }
-    document.getElementById(tabName).style.display = "block";
     evt.currentTarget.classList.add("active");
 }
+
+
 
 function showUserInfo(userId) {
     fetch(`./admin/user/${userId}`)
         .then(response => response.json())
         .then(data => {
+            document.getElementById('userId').value = data.id;
+            document.getElementById('is_admin').value = data.is_admin ? '1' : '0';
+            document.getElementById('name').value = data.name;
+            document.getElementById('surname').value = data.surname;
+            document.getElementById('username').value = data.username;
+            document.getElementById('phone').value = data.phone;
+            document.getElementById('date_of_birth').value = data.date_of_birth;
+            document.getElementById('gender').value = data.gender;
+            document.getElementById('email').value = data.email;
+
             const userInfoDiv = document.getElementById('userInfoTemplate');
-            const defaultImage = "./storage/profile_images/default.jpg";
-
-            const profileImagePath = `../storage/profile_images/${data.profile_image}`;
-            const profileImageURL = new URL(profileImagePath, location.href).href;
-
-            const userInfoHTML = `
-                <img src="${profileImageURL}" alt="Imagen de perfil" class="user-info-img">
-                <svg class="img-edit" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512">
-                    <path fill="#000000"
-                        d="M441 58.9L453.1 71c9.4 9.4 9.4 24.6 0 33.9L424 134.1 377.9 88 407 58.9c9.4-9.4 24.6-9.4 33.9 0zM209.8 256.2L344 121.9 390.1 168 255.8 302.2c-2.9 2.9-6.5 5-10.4 6.1l-58.5 16.7 16.7-58.5c1.1-3.9 3.2-7.5 6.1-10.4zM373.1 25L175.8 222.2c-8.7 8.7-15 19.4-18.3 31.1l-28.6 100c-2.4 8.4-.1 17.4 6.1 23.6s15.2 8.5 23.6 6.1l100-28.6c11.8-3.4 22.5-9.7 31.1-18.3L487 138.9c28.1-28.1 28.1-73.7 0-101.8L474.9 25C446.8-3.1 401.2-3.1 373.1 25zM88 64C39.4 64 0 103.4 0 152V424c0 48.6 39.4 88 88 88H360c48.6 0 88-39.4 88-88V312c0-13.3-10.7-24-24-24s-24 10.7-24 24V424c0 22.1-17.9 40-40 40H88c-22.1 0-40-17.9-40-40V152c0-22.1 17.9-40 40-40H200c13.3 0 24-10.7 24-24s-10.7-24-24-24H88z" />
-                </svg>
-                <p><b>Nombre:</b> ${data.name}</p>
-                <p><b>Apellido:</b> ${data.surname}</p>
-                <p><b>Nombre de usuario:</b> ${data.username}</p>
-                <p><b>Email:</b> ${data.email}</p>
-                <p><b>Teléfono:</b> ${data.phone}</p>
-                <p><b>Fecha de nacimiento:</b> ${data.date_of_birth}</p>
-                <p><b>Género:</b> ${data.gender}</p>
-                <p><b>Es administrador:</b> ${data.is_admin ? 'Sí' : 'No'}</p>
-            `;
-
-            userInfoDiv.innerHTML = userInfoHTML;
             userInfoDiv.style.display = 'block';
 
             const blurUserInfoDiv = document.querySelector('.blur-userInfo');
             if (blurUserInfoDiv) {
                 blurUserInfoDiv.style.display = 'block';
             }
-
-            const profileImage = document.querySelector('.user-info-img');
-            if (profileImage) {
-                profileImage.addEventListener('mouseenter', function () {
-                    const editIcon = document.querySelector('.img-edit');
-                    if (editIcon) {
-                        editIcon.style.display = 'block';
-                    }
-                });
-
-                profileImage.addEventListener('mouseleave', function () {
-                    const editIcon = document.querySelector('.img-edit');
-                    if (editIcon) {
-                        editIcon.style.display = 'none';
-                    }
-                });
-            }
         })
         .catch(error => console.error('Error al obtener la información del usuario:', error));
 }
+
+function searchUser() {
+    const input = document.getElementById('searchInput');
+    const filter = input.value.toLowerCase();
+
+    fetch(`/admin/search-users?search=${encodeURIComponent(filter)}`)
+        .then(response => {
+            if (!response.ok) {
+                throw new Error('Network response was not ok');
+            }
+            return response.json();
+        })
+        .then(users => {
+            const tableBody = document.querySelector('.table-scroll');
+            tableBody.innerHTML = '';
+
+            if (users.length > 0) {
+                users.forEach(user => {
+                    const row = document.createElement('div');
+                    row.classList.add('row', 'row-table-scroll');
+                    row.setAttribute('onclick', `showUserInfo('${user.id}')`);
+
+                    const idCell = document.createElement('div');
+                    idCell.classList.add('cell');
+                    idCell.textContent = user.id;
+
+                    const nameCell = document.createElement('div');
+                    nameCell.classList.add('cell');
+                    nameCell.textContent = `${user.name} ${user.surname}`;
+
+                    const imageCell = document.createElement('div');
+                    imageCell.classList.add('cell');
+
+                    const profileImagePath = `storage/profile_images/${user.profile_image}`;
+                    const img = document.createElement('img');
+                    img.src = profileImagePath;
+                    img.alt = `Perfil de ${user.username}`;
+                    img.onerror = () => img.src = 'storage/profile_images/default.jpg';
+
+                    imageCell.appendChild(img);
+
+                    row.appendChild(idCell);
+                    row.appendChild(nameCell);
+                    row.appendChild(imageCell);
+
+                    tableBody.appendChild(row);
+                });
+            } else {
+                const noResultsRow = document.createElement('div');
+                noResultsRow.classList.add('row', 'row-table-scroll');
+                noResultsRow.textContent = 'No se encontraron resultados';
+                tableBody.appendChild(noResultsRow);
+            }
+        })
+        .catch(error => console.error('Error al buscar usuarios:', error));
+}
+
+
+function updateUser(event) {
+    event.preventDefault();
+
+    const userId = document.getElementById('userId').value;
+    const isAdmin = document.getElementById('is_admin').value;
+    const name = document.getElementById('name').value;
+    const surname = document.getElementById('surname').value;
+    const username = document.getElementById('username').value;
+    const phone = document.getElementById('phone').value;
+    const dateOfBirth = document.getElementById('date_of_birth').value;
+    const gender = document.getElementById('gender').value;
+    const email = document.getElementById('email').value;
+    const password = document.getElementById('password').value;
+    const confirmPassword = document.getElementById('confirm_password').value;
+    const profileImage = document.getElementById('profile_image').files[0];
+
+    const formData = new FormData();
+    formData.append('is_admin', isAdmin);
+    formData.append('name', name);
+    formData.append('surname', surname);
+    formData.append('username', username);
+    formData.append('phone', phone);
+    formData.append('date_of_birth', dateOfBirth);
+    formData.append('gender', gender);
+    formData.append('email', email);
+    formData.append('password', password);
+    formData.append('confirm_password', confirmPassword);
+    if (profileImage) {
+        formData.append('profile_image', profileImage);
+    }
+
+    const token = document.querySelector('meta[name="csrf-token"]').getAttribute('content');
+
+    fetch(`./admin/user/${userId}`, {
+        method: 'POST',
+        headers: {
+            'X-CSRF-TOKEN': token,
+        },
+        body: formData
+    })
+    .then(response => {
+        if (!response.ok) {
+            throw new Error('Error al actualizar los datos del usuario');
+        }
+        window.location.href = window.location.href;
+    })
+    .catch(error => {
+        console.error('Error al actualizar los datos del usuario:', error);
+        alert(`Hubo un error al actualizar los datos del usuario: ${error.message}`);
+    });
+}
+
+
+
+
+
+function deleteUser(userId) {
+    if (confirm("¿Estás seguro de que quieres eliminar este usuario?")) {
+        fetch(`/admin/user/${userId}`, {
+            method: 'DELETE',
+            headers: {
+                'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content'),
+            },
+        })
+        .then(response => {
+            if (!response.ok) {
+                throw new Error('No se pudo eliminar el usuario');
+            }
+            return response.json();
+        })
+        .then(data => {
+            console.log('Usuario eliminado:', data);
+            window.location.reload(); 
+        })
+        .catch(error => {
+            console.error('Error al eliminar el usuario:', error);
+            alert(`Hubo un error al eliminar el usuario: ${error.message}`);
+        });
+    }
+}
+
+function deletePhoto(photoId) {
+    console.log('ID de la foto:', photoId);
+    if (confirm("¿Estás seguro de que quieres eliminar esta foto?")) {
+        const token = document.querySelector('meta[name="csrf-token"]').getAttribute('content');
+        fetch(`/admin/delete-photo/${photoId}`, {
+            method: 'DELETE',
+            headers: {
+                'X-CSRF-TOKEN': token,
+                'Content-Type': 'application/json'
+            },
+        })        
+        .then(response => {
+            if (!response.ok) {
+                throw new Error('No se pudo eliminar la foto');
+            }
+            return response.json();
+        })
+        .then(data => {
+            console.log('Foto eliminada:', data);
+            window.location.reload();
+        })
+        .catch(error => {
+            console.error('Error al eliminar la foto:', error);
+            alert(`Hubo un error al eliminar la foto: ${error.message}`);
+        });
+    }
+}
+
 
 
 

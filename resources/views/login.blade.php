@@ -21,36 +21,14 @@
                 <img src="{{ asset('img/arrow-icon.png') }}" alt="Volver al login">
             </a>
             <div class="container">
-                <h1 class="text-center">Iniciar sesión</h1>
-
-                @if(session('error'))
-                <div class="alert alert-danger" role="alert">
-                    {{ session('error') }}
+                <h1 class="text-center">Bienvenido a Barberia Abel·lanas</h1>
+                <div class="text-center">
+                    <a href="/google-auth/redirect" class="btn btn-primary small-button">
+                        <img src="https://cdn1.iconfinder.com/data/icons/google-s-logo/150/Google_Icons-09-512.png"
+                            alt="Iniciar sesión con Google" class="google-logo">
+                        Iniciar / Registrar
+                    </a>
                 </div>
-                @endif
-
-                <form action="{{ route('login.post') }}" method="post">
-                    @csrf
-                    <div class="mb-3">
-                        <label for="username" class="form-label">Nombre de usuario:</label>
-                        <input type="text" class="form-control" id="username" name="username" required>
-                    </div>
-                    <div class="mb-3">
-                        <label for="password" class="form-label">Contraseña:</label>
-                        <input type="password" class="form-control" id="password" name="password" required>
-                    </div>
-                    <div class="mb-3 text-center">
-                        <p calss="p_google">Inicia Sesion tambien con:</p>
-                        <a href="/google-auth/redirect">
-                            <img src="https://cdn1.iconfinder.com/data/icons/google-s-logo/150/Google_Icons-09-512.png"
-                                alt="Iniciar sesión con Google" class="google-logo">
-                        </a>
-                    </div>
-
-                    <div class="mb-3 text-center">
-                        <button type="submit" class="btn btn-primary">Entrar</button>
-                    </div>
-                </form>
             </div>
         </div>
     </div>

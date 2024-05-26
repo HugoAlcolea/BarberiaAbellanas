@@ -16,10 +16,10 @@ class CreateCitasTable extends Migration
         Schema::create('citas', function (Blueprint $table) {
             $table->id();
             $table->foreignId('user_id')->constrained('custom_users')->onDelete('cascade');
-            $table->foreignId('barber_id')->constrained('barberos')->onDelete('cascade');
-            $table->foreignId('servicio_id')->constrained('servicios')->onDelete('cascade');
             $table->date('fecha');
             $table->time('hora');
+            $table->string('codigo')->unique();
+            $table->decimal('dinero_cobrado', 8, 2)->nullable(); 
             $table->timestamps();
         });
     }
