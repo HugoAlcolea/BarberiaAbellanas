@@ -186,7 +186,7 @@ class AdminController extends Controller
                 'regex:/^A\d{4}$/'
             ],
             'euros' => 'required|numeric|min:0',
-            'points' => 'required|integer|min:0',
+            'points' => 'required|integer',
         ]);
 
         try {
