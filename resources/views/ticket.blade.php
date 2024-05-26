@@ -30,6 +30,7 @@
                     las {{ $cita->hora }},</p>
                 <p>Tu código de reserva es:</p>
                 <h1 class="codigo" style="color: red">{{ $cita->codigo }}</h1>
+                <a href="{{ route('index') }}" class="btn btn-primary mt-3 boton" style="background-color: white; color:black; border: 2px solid black">Volver al principio</a>
             </div>
         </div>
     </div>

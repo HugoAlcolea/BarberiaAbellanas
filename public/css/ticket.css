@@ -13,8 +13,8 @@ body {
 
 .formulario-container {
     position: relative;
-    width: 20%;
-    height: 50vh;
+    width: auto;
+    height: auto;
     margin: 75px auto;
     background-color: #ffffff;
     border-radius: 30px;
@@ -119,3 +119,7 @@ body {
     background-color: #000;
   }
 
+  .boton:hover{
+    background-color: #bbbbbb;
+    transition: 0.3s;
+  }
