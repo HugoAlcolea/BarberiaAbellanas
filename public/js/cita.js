@@ -73,11 +73,9 @@ document.addEventListener('DOMContentLoaded', function () {
             insertEvent(accessToken, eventDetails)
                 .then((success) => {
                     if (success) {
-                        document.getElementById('processing-message').style.display = 'none';
-                        document.getElementById('download-form').style.display = 'block';
-                        document.getElementById('cita-form').style.display = 'none';
+                        // window.location.href = "{{ route('mostrar.ticket', ['citaId' => ':citaId']) }}".replace(':citaId', success);
                     } else {
-                        document.getElementById('processing-message').style.display = 'block';
+                        console.error('Error al programar la cita.');
                     }
                 })
                 .catch((error) => {
@@ -124,7 +122,7 @@ async function insertEvent(accessToken, eventDetails) {
             });
 
             if (insertResponse.status === 200) {
-                return true;
+                return insertResponse.result.id;
             } else {
                 throw new Error('Hubo un error al programar la cita');
             }

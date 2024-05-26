@@ -170,25 +170,41 @@ class CustomUserController extends Controller
 
     public function guardarCita(Request $request)
     {
-
-    $userId = Auth::id();
-    $fecha = $request->input('fecha');
-    $hora = $request->input('hora');
+        $userId = Auth::id();
+        $fecha = $request->input('fecha');
+        $hora = $request->input('hora');
+        
+        do {
+            $codigo = 'A' . rand(1000, 9999);
+        } while (Cita::where('codigo', $codigo)->exists());
     
-    do {
-        $codigo = 'A' . rand(1000, 9999);
-    } while (Cita::where('codigo', $codigo)->exists());
-
-    $cita = new Cita();
-    $cita->user_id = $userId;
-    $cita->fecha = $fecha;
-    $cita->hora = $hora;
-    $cita->codigo = $codigo;
-    $cita->save();
-
-    $usuario = CustomUser::find($userId);
+        $cita = new Cita();
+        $cita->user_id = $userId;
+        $cita->fecha = $fecha;
+        $cita->hora = $hora;
+        $cita->codigo = $codigo;
+        $cita->save();
+    
+        $usuario = CustomUser::find($userId);
+        return redirect()->route('mostrar.ticket', ['citaId' => $cita->id]);
     }
+
+    public function mostrarTicket($citaId)
+    {
+        $cita = Cita::find($citaId);
     
+        if (!$cita) {
+            return redirect()->back()->with('error', 'Cita no encontrada.');
+        }
+    
+        if (Auth::id() !== $cita->user_id) {
+            return redirect()->route('index')->with('error', 'No tienes permiso para acceder a esta cita.');
+        }
+    
+        return view('ticket', compact('cita'));
+    }
+
+        
     
     public function descargarPDF($citaId)
     {

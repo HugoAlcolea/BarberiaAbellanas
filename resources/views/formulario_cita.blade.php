@@ -84,17 +84,6 @@
                         <button type="submit" class="small-button" id="saveChangesBtn">Enviar</button>
                     </div>
                 </form>
-                <div id="processing-message" style="display: none;">
-                    <p>Procesando solicitud...</p>
-                </div>
-                <div id="download-form" style="display: none;">
-                    <form id="download-form" action="{{ route('descargar.pdf', ['cita' => $cita->id]) }}" method="POST">
-                        @csrf
-                        <button type="submit" class="small-button" id="downloadBtn">Descargar PDF</button>
-                    </form>
-                    <p>Este proceso peude tardar unos 20seg, espere porfavor</p>
-                    <h3>Para cancelar la cita pongase en contacto con el Barbero</h3>
-                </div>
             </div>
         </div>
     </div>

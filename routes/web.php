@@ -82,6 +82,7 @@ Route::get('/principal', function () {
 // Rutas de Citas
 Route::get('/cita', [CustomUserController::class, 'mostrarFormularioCita'])->name('cita.formulario');
 Route::post('/guardar-cita', [CustomUserController::class, 'guardarCita'])->name('guardar.cita');
+Route::get('/mostrar-ticket/{citaId}', [CustomUserController::class, 'mostrarTicket'])->name('mostrar.ticket');
 Route::post('/descargar-pdf/{cita}', [CustomUserController::class, 'descargarPDF'])->name('descargar.pdf');
 Route::get('/auth/google-calendar', [CustomUserController::class, 'authenticateWithGoogleCalendar'])->name('auth.google-calendar');
 
