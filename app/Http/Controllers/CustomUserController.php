@@ -17,6 +17,7 @@ use App\Models\HaircutGallery;
 use Illuminate\Support\Facades\DB;
 use Barryvdh\DomPDF\Facade\Pdf;
 use Illuminate\Support\Facades\Queue;
+use Illuminate\Support\Facades\Log;
 
 use Google_Client;
 use Google_Service_Calendar;
@@ -30,8 +31,19 @@ class CustomUserController extends Controller
         $usuarios = CustomUser::all(); 
         $estilos = EstilosDeCortes::all(); 
         $cita = Cita::all();
+        $accessToken = null;
+
+        $citaMasCercana = Cita::where('user_id', auth()->id())
+        ->where('fecha', '>=', now())
+        ->orderBy('fecha', 'asc')
+        ->first();
         
-        return view('index', compact('fotos', 'barber', 'hairstyle', 'usuarios', 'estilos', 'cita'));
+        if (Auth::check()) {
+            $response = $this->authenticateWithGoogleCalendar();
+            $accessToken = json_decode($response->getContent(), true)['access_token'];
+        }
+
+        return view('index', compact('fotos', 'barber', 'hairstyle', 'usuarios', 'estilos', 'cita', 'citaMasCercana', 'accessToken'));
     }
 
     public function index()
@@ -42,38 +54,58 @@ class CustomUserController extends Controller
         $usuarios = CustomUser::all(); 
         $estilos = EstilosDeCortes::all(); 
         $cita = Cita::all();
+        $accessToken = null;
+
+        $citaMasCercana = Cita::where('user_id', auth()->id())
+        ->where('fecha', '>=', now())
+        ->orderBy('fecha', 'asc')
+        ->first();
         
-        return view('index', compact('fotos', 'barber', 'hairstyle', 'usuarios', 'estilos', 'cita'));
+        if (Auth::check()) {
+            $response = $this->authenticateWithGoogleCalendar();
+            $accessToken = json_decode($response->getContent(), true)['access_token'];
+        }
+
+        return view('index', compact('fotos', 'barber', 'hairstyle', 'usuarios', 'estilos', 'cita', 'citaMasCercana', 'accessToken'));
     }
 
-    public function register(Request $request){
-        $request->validate([
+    public function register(Request $request)
+    {
+        $userId = $request->input('id') ?? Auth::id();
+    
+        $rules = [
             'name' => 'required',
             'surname' => 'required',
-            'username' => 'required|unique:custom_users',
+            'username' => 'required|unique:custom_users,username,' . $userId,
             'phone' => 'required',
             'date_of_birth' => 'required|date',
             'gender' => 'required|in:hombre,mujer',
-            'email' => 'required|email',
+            'email' => 'required|email|unique:custom_users,email,' . $userId,
             'password' => 'required|min:6',
             'confirm_password' => 'required|same:password',
             'profile_image' => 'image|mimes:jpeg,png,jpg,gif',
-        ], [
+        ];
+    
+        $messages = [
             'username.unique' => 'El nombre de usuario ya está en uso.',
             'email.unique' => 'El correo electrónico ya está en uso.',
             'gender.in' => 'El campo de género debe ser hombre o mujer.',
             'confirm_password.same' => 'La contraseña y la confirmación de contraseña no coinciden.',
-        ]);
+        ];
     
-        $user = CustomUser::where('email', $request->input('email'))->first();
+        $request->validate($rules, $messages);
+    
+        $user = CustomUser::find($userId);
     
         if ($user) {
+            // Existing user - update
             $user->name = $request->input('name');
             $user->surname = $request->input('surname');
             $user->username = $request->input('username');
             $user->phone = $request->input('phone');
             $user->date_of_birth = $request->input('date_of_birth');
             $user->gender = $request->input('gender');
+            $user->email = $request->input('email');
             $user->password = Hash::make($request->input('password'));
             $user->confirm_password = Hash::make($request->input('confirm_password'));
     
@@ -90,28 +122,59 @@ class CustomUserController extends Controller
     
             $user->registration_completed = true;
             $user->save();
-
-            Auth::logout();
     
+            Auth::logout();
             return redirect('/login');
         } else {
-            return redirect()->back()->withInput()->withErrors(['email' => 'El correo electrónico no existe.']);
+            // New user - create
+            $user = new CustomUser();
+            $user->name = $request->input('name');
+            $user->surname = $request->input('surname');
+            $user->username = $request->input('username');
+            $user->phone = $request->input('phone');
+            $user->date_of_birth = $request->input('date_of_birth');
+            $user->gender = $request->input('gender');
+            $user->email = $request->input('email');
+            $user->password = Hash::make($request->input('password'));
+            $user->confirm_password = Hash::make($request->input('confirm_password'));
+    
+            if ($request->hasFile('profile_image')) {
+                $name = $request->input('name');
+                $surname = $request->input('surname');
+                $imageExtension = $request->file('profile_image')->getClientOriginalExtension();
+                $imageName = $name . $surname . '.' . $imageExtension;
+                $request->file('profile_image')->storeAs('public/profile_images', $imageName);
+                $user->profile_image = $imageName;
+            } else {
+                $user->profile_image = 'default.jpg';
+            }
+    
+            $user->registration_completed = true;
+            $user->save();
+    
+            Auth::logout();
+            return redirect('/login');
         }
     }
     
     
     
-    public function showRegistrationForm(){
-        $user = Auth::user();
-        if ($user) {
-            return view('register', [
-                'step' => 1,
-                'user' => $user,
-            ]);
-        } else {
-            return redirect()->route('login');
+    
+    
+    public function showRegistrationForm($id = null)
+    {
+        $user = null;
+        if ($id) {
+            $user = CustomUser::find($id);
         }
+
+        return view('register', ['user' => $user]);
     }
+
+    public function redirectToRegisterForm() {
+        return view('register');
+    }
+    
     
 
     public function showLoginForm(){
@@ -124,15 +187,23 @@ class CustomUserController extends Controller
     
         if (Auth::attempt($credentials)) {
             $user = Auth::user();
-
+    
             $statsUser = StatsUser::where('user_id', $user->id)->first();
+
+            if (!$statsUser) {
+                $statsUser = new StatsUser();
+                $statsUser->user_id = $user->id;
+                $statsUser->haircuts = 0;
+                $statsUser->points = 0;
+                $statsUser->save();
+            }
     
             if ($user->isAdmin()) {
                 return redirect()->route('admin.mainTable');
             }
     
             if ($user->registration_completed) {
-                return redirect()->route('index');
+                return redirect()->route('view');
             }
     
             return redirect()->route('register');
@@ -140,6 +211,7 @@ class CustomUserController extends Controller
     
         return redirect()->back()->with('error', 'Credenciales no válidas. Inténtalo de nuevo.');
     }
+    
     
 
 
@@ -184,6 +256,8 @@ class CustomUserController extends Controller
         $cita->hora = $hora;
         $cita->codigo = $codigo;
         $cita->save();
+
+        Log::info('Cita guardada con ID:', ['cita_id' => $cita->id]);
     
         $usuario = CustomUser::find($userId);
         return redirect()->route('mostrar.ticket', ['citaId' => $cita->id]);
@@ -198,33 +272,20 @@ class CustomUserController extends Controller
         }
     
         if (Auth::id() !== $cita->user_id) {
-            return redirect()->route('index')->with('error', 'No tienes permiso para acceder a esta cita.');
+            return redirect()->route('view')->with('error', 'No tienes permiso para acceder a esta cita.');
         }
     
         return view('ticket', compact('cita'));
     }
-
-        
     
-    public function descargarPDF($citaId)
+
+    public function eliminarCita($id)
     {
-        $cita = Cita::find($citaId);
-        if (!$cita) {
-            return response()->json(['error' => 'Cita no encontrada'], 404);
-        }
-    
-        $usuario = CustomUser::find($cita->user_id);
-        if (!$usuario) {
-            return response()->json(['error' => 'Usuario no encontrado'], 404);
-        }
-    
-        $pdf = PDF::loadView('pdf', compact('cita', 'usuario'));
-    
-        return $pdf->download('ticket_cita_' . $cita->codigo . '.pdf');
+        $cita = Cita::findOrFail($id);
+        $cita->delete();
+        return redirect()->route('view')->with('success', '¡La cita ha sido eliminada correctamente!');
     }
-    
 
-    
 
 
     public function filterImage(Request $request)
@@ -338,6 +399,6 @@ class CustomUserController extends Controller
 
     public function logout(){
         Auth::logout();
-        return redirect()->route('index');
+        return redirect()->route('view');
     }
 }

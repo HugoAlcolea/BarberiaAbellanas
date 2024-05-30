@@ -20,7 +20,7 @@ use Illuminate\Support\Facades\Auth;
 |
 */
 
-Route::get('/', [CustomUserController::class, 'view']);
+Route::get('/', [CustomUserController::class, 'view'])->name('view');
 Route::get('/index', [CustomUserController::class, 'index'])->name('index');
 
 Route::get('/google-auth/redirect', function () {
@@ -52,21 +52,24 @@ Route::get('/google-auth/callback', function () {
         $statsUser->user_id = $user->id;
         $statsUser->haircuts = 0;
         $statsUser->points = 0;
-        $statsUser->save(); 
+        $statsUser->save();
 
-        return redirect()->route('register', ['id' => $user->id]);
+        return redirect()->route('register.with.id', ['id' => $user->id]);
     } else {
         Auth::login($user);
         if ($user->is_admin) {
             return redirect()->route('admin.mainTable');
         } else {
-            return redirect()->route('index');
+            return redirect()->route('view');
         }
     }
 });
 
+
 // Rutas de register
+Route::get('/register/{id}', [CustomUserController::class, 'showRegistrationForm'])->name('register.with.id');
 Route::get('/register', [CustomUserController::class, 'showRegistrationForm'])->name('register');
+Route::get('/register', [CustomUserController::class, 'redirectToRegisterForm'])->name('new.register');
 Route::post('/register/step1', [CustomUserController::class, 'registerStep1'])->name('register.step1');
 Route::post('/register', [CustomUserController::class, 'register'])->name('register.post'); 
 
@@ -83,11 +86,10 @@ Route::get('/principal', function () {
 Route::get('/cita', [CustomUserController::class, 'mostrarFormularioCita'])->name('cita.formulario');
 Route::post('/guardar-cita', [CustomUserController::class, 'guardarCita'])->name('guardar.cita');
 Route::get('/mostrar-ticket/{citaId}', [CustomUserController::class, 'mostrarTicket'])->name('mostrar.ticket');
-Route::post('/descargar-pdf/{cita}', [CustomUserController::class, 'descargarPDF'])->name('descargar.pdf');
 Route::get('/auth/google-calendar', [CustomUserController::class, 'authenticateWithGoogleCalendar'])->name('auth.google-calendar');
 
 // Rutas de Perfil
-Route::get('/principal/perfil', [CustomUserController::class, 'showPerfil'])->name('perfil');
+Route::delete('/eliminar-cita/{id}', [CustomUserController::class, 'eliminarCita'])->name('eliminar_cita');
 
 // Rutas de Fotos
 Route::get('/filterImage', [CustomUserController::class, 'filterImage'])->name('filterImage');
@@ -101,7 +103,7 @@ Route::post('/delete-account', [CustomUserController::class, 'deleteAccount'])->
 // Rutas de Logout
 Route::get('/logout', function () {
     Auth::logout();
-    return redirect()->route('index')->withCookie(Cookie::forget('token_user'));
+    return redirect()->route('view')->withCookie(Cookie::forget('token_user'));
 })->name('logout');
 
 // Rutas Admin
@@ -113,9 +115,12 @@ Route::middleware(['auth', 'admin'])->group(function () {
     Route::delete('/admin/user/{id}', 'AdminController@deleteUser')->name('admin.delete_user');
     Route::delete('/admin/delete-photo/{photoId}', [AdminController::class, 'deletePhoto'])->name('admin.delete_photo');
     Route::get('/admin/calendar', [AdminController::class, 'calendar'])->name('admin.calendar');
+    Route::delete('/eliminar-cita/{id}', [AdminController::class, 'eliminarCita'])->name('eliminar_cita');
     Route::post('/admin/upload-photo', [AdminController::class, 'uploadPhoto'])->name('admin.upload-photo');
     Route::post('/admin/facturacion', [AdminController::class, 'processFacturacion'])->name('admin.facturacion');
     Route::post('/descargar-facturacion', [AdminController::class, 'generarPDF'])->name('admin.descargarFacturacion');
+    Route::get('/index', [CustomUserController::class, 'index'])->name('index');
+    Route::get('/admin/search-facturacion', [AdminController::class, 'searchFacturacion'])->name('admin.searchFacturacion');
     Route::get('/admin-logout', [AdminController::class, 'logout'])->name('admin.logout');
 });
 

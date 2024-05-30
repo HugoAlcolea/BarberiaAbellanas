@@ -17,7 +17,7 @@
         <div class="box">
             <div class="lights-box">
                 <span></span>
-                <a href="{{ route('index') }}" class="back-button">
+                <a href="{{ route('login') }}" class="back-button">
                     <img src="{{ asset('img/arrow-icon.png') }}" alt="Volver al login">
                 </a>
                 <div class="container">
@@ -45,21 +45,32 @@
                         <form action="{{ route('register.post') }}" method="post" enctype="multipart/form-data">
                             @csrf
                             <div class="step">
+                                @if(isset($user))
                                 <div class="input-group">
                                     <label for="name">Nombre:</label>
-                                    <input type="text" id="name" name="name" value="{{ $user->name }}" required>
+                                    <input type="text" id="name" name="name" value="{{ $user->name }}" required autofocus>
                                 </div>
                                 <div class="input-group">
                                     <label for="surname">Apellido:</label>
                                     <input type="text" id="surname" name="surname" value="{{ $user->surname }}"
                                         required>
                                 </div>
+                                @else
+                                <div class="input-group">
+                                    <label for="name">Nombre:</label>
+                                    <input type="text" id="name" name="name" required autofocus>
+                                </div>
+                                <div class="input-group">
+                                    <label for="surname">Apellido:</label>
+                                    <input type="text" id="surname" name="surname" required>
+                                </div>
+                                @endif
                             </div>
 
                             <div class="step">
                                 <div class="input-group">
                                     <label for="username">Nombre de usuario:</label>
-                                    <input type="text" id="username" name="username" required>
+                                    <input type="text" id="username" name="username" required autofocus>
                                 </div>
                                 <div class="input-group">
                                     <label for="phone">Teléfono:</label>
@@ -73,8 +84,13 @@
 
                             <div class="step">
                                 <div class="input-group">
+                                    @if(isset($user))
                                     <label for="email">Correo electrónico:</label>
-                                    <input type="email" id="email" name="email" value="{{ $user->email }}" required>
+                                    <input type="email" id="email" name="email" value="{{ $user->email }}" required autofocus>
+                                    @else
+                                    <label for="email">Correo electrónico:</label>
+                                    <input type="email" id="email" name="email" required autofocus>
+                                    @endif
                                 </div>
                                 <div class="input-group">
                                     <label for="password">Contraseña:</label>

@@ -25,6 +25,7 @@
                 <button class="tablink" onclick="openTab(event, 'Tab3')">Fotos</button>
                 <button class="tablink" onclick="openTab(event, 'Tab4')">Gestion de Citas</button>
                 <button class="tablink" onclick="openTab(event, 'Tab5')">Facturacion</button>
+                <a href="{{ route('view') }}"><button class="tablink">Home</button></a>
                 <a href="{{ route('logout') }}"><button class="tablink">Cerrar Sesión</button></a>
             </span>
         </span>
@@ -56,7 +57,8 @@
                 <div class="fondoWapo">
                     <div class="search-container container mt-3">
                         <div class="input-group">
-                            <input type="text" id="searchInput" class="form-control" placeholder="Buscar por nombre...">
+                            <input type="text" id="searchInput" class="form-control"
+                                placeholder="Buscar por Nombre o Apllido">
                             <button class="btn btn-primary" onclick="searchUser()">Buscar</button>
                         </div>
                     </div>
@@ -77,10 +79,10 @@
                                     $profileImagePath = "storage/profile_images/" . $user->profile_image;
 
                                     if (file_exists(public_path($profileImagePath))) {
-                                    echo "<img src='" . asset($profileImagePath) . "'
-                                        alt='Perfil de {$user->username}'>";
+                                    echo "<img src='" . asset($profileImagePath) . "' alt='Perfil de {$user->username}'
+                                        style='max-height: 75px'>";
                                     } else {
-                                    echo "<img src='" . asset('storage/profile_images/default.jpg')
+                                    echo "<img src='" . asset(' storage/profile_images/default.jpg')
                                         . "' alt='Imagen por defecto'>" ; } @endphp </div>
                                 </div>
                                 @endforeach
@@ -233,7 +235,7 @@
                                 <div class="col">
                                     <div class="photo-thumbnail">
                                         <img src="{{ asset('storage/haircut_gallery/' . $photo->photo_name) }}"
-                                            alt="{{ $photo->photo_name }}" style="height:50px; width:50px">
+                                            alt="{{ $photo->photo_name }}" style="height:75px; width:auto">
                                         <p>{{ $photo->photo_name }}</p>
                                         <button class="btn btn-danger delete-photo-btn"
                                             onclick="deletePhoto('{{ $photo->id }}')">Eliminar</button>
@@ -263,13 +265,72 @@
             </script>
 
 
+            <!-- <a href="{{ route('admin.calendar') }}"><button class="tablink"
+        style="width: 10%;">Calendario</button></a> -->
 
             <span id="Tab4" class="tabcontent">
                 <h1 class="titulo">Gestion de Citas</h1>
                 <br>
-                <a href="{{ route('admin.calendar') }}"><button class="tablink"
-                        style="width: 10%;">Calendario</button></a>
+                <div id="loading-message">Cargando, por favor espera...</div>
+                <div class="citas-pendientes" style="display: none;">
+                    <h2>Citas Pendientes</h2>
+                    <div class="table-responsive">
+                        <div class="input-group">
+                            <input type="date" id="fecha" name="fecha" class="form-control">
+                            <button class="btn btn-primary" onclick="filtrarCitas()">Buscar</button>
+                            <button class="btn btn-secondary" onclick="limpiarFiltro()">Limpiar Filtro</button>
+                        </div>
+                        <br>
+                        <table class="table table-striped text-white">
+                            <thead>
+                                <tr>
+                                    <th>Código</th>
+                                    <th>Fecha</th>
+                                    <th>Hora</th>
+                                    <th>Usuario</th>
+                                    <th>Acciones</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @foreach($citasPendientes as $cita)
+                                <tr>
+                                    <td class="text-white cita-id" data-cita-id="{{ $cita->id }}">{{ $cita->codigo }}
+                                    </td>
+                                    <td class="text-white cita-fecha"
+                                        data-cita-fecha="{{ $cita->fecha->format('Y-m-d') }}">
+                                        {{ $cita->fecha->format('Y-m-d') }}
+                                    </td>
+                                    <td class="text-white cita-hora" data-cita-hora="{{ $cita->hora }}">
+                                        {{ $cita->hora }}</td>
+                                    <td class="text-white cita-usuario">{{ $cita->user_id }}</td>
+                                    <td>
+                                        <form id="delete-form-{{ $cita->id }}"
+                                            action="{{ route('eliminar_cita', ['id' => $cita->id]) }}" method="POST">
+                                            @csrf
+                                            @method('DELETE')
+                                            <input type="hidden" name="google-calendar-access-token"
+                                                value="{{ $accessToken }}">
+                                            <input type="hidden" name="cita-id" value="{{ $cita->id }}">
+                                            <input type="hidden" name="cita-fecha" value="{{ $cita->fecha }}">
+                                            <input type="hidden" name="cita-hora" value="{{ $cita->hora }}">
+                                            <button type="button" class="btn btn-danger"
+                                                onclick="eliminarCita(this.form)">Eliminar Cita</button>
+                                        </form>
+                                    </td>
+                                </tr>
+                                @endforeach
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
             </span>
+
+            <script async defer src="https://apis.google.com/js/api.js" onload="gapiLoaded()"></script>
+            <script async defer src="https://accounts.google.com/gsi/client" onload="gisLoaded()"></script>
+            <script src="{{ asset('js/admin/eliminarEventoAdmin.js') }}"></script>
+
+
+
 
 
 
@@ -296,7 +357,12 @@
                         </form>
                     </div>
                     <div class="col-md-5">
-                        <h2>Lista de Facturacion</h2>
+                        <h2>Lista de Facturación</h2>
+                        <div class="input-group mb-3">
+                            <input type="text" class="form-control" id="search" name="search"
+                                placeholder="Buscar por nombre o apellido" required>
+                            <button class="btn btn-primary" type="submit" onclick="filterCitas()">Buscar</button>
+                        </div>
                         <div class="custom-table-wrapper">
                             <table class="table custom-table p-4" style="color: white">
                                 <thead>
@@ -307,7 +373,7 @@
                                         <th>Dinero Cobrado</th>
                                     </tr>
                                 </thead>
-                                <tbody>
+                                <tbody id="citasTableBody">
                                     @foreach($citas as $cita)
                                     <tr>
                                         <td>{{ $cita->id }}</td>
@@ -334,6 +400,7 @@
                     </div>
                 </div>
             </span>
+
 
 
 

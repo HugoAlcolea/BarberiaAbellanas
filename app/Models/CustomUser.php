@@ -39,5 +39,10 @@ class CustomUser extends Model implements Authenticatable
             return response()->json(['message' => 'Error al eliminar el usuario', 'error' => $e->getMessage()], 500);
         }
     }
+
+    public function citas()
+    {
+        return $this->hasMany(Cita::class, 'user_id');
+    }
 }
 

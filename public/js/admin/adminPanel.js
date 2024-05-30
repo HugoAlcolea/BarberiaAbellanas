@@ -1,5 +1,10 @@
 document.addEventListener('DOMContentLoaded', function () {
-    document.getElementById("Tab1").style.display = "block";
+    const activeTab = localStorage.getItem('activeTab');
+    if (activeTab) {
+        openTab({ currentTarget: document.querySelector(`button[onclick="openTab(event, '${activeTab}')"]`) }, activeTab);
+    } else {
+        document.getElementById("Tab1").style.display = "block";
+    }
 
     const rows = document.querySelectorAll('.row');
     const tableScroll = document.querySelector('.table-scroll');
@@ -23,6 +28,7 @@ document.addEventListener('DOMContentLoaded', function () {
     }
 });
 
+
 function openTab(evt, tabName) {
     var i, tabcontent, tablinks;
     tabcontent = document.getElementsByClassName("tabcontent");
@@ -35,7 +41,9 @@ function openTab(evt, tabName) {
     }
     document.getElementById(tabName).style.display = "block";
     evt.currentTarget.classList.add("active");
+    localStorage.setItem('activeTab', tabName);
 }
+
 
 
 
@@ -230,6 +238,47 @@ function deletePhoto(photoId) {
     }
 }
 
+function filtrarCitas() {
+    var fechaSeleccionada = document.getElementById('fecha').value;
+    var citas = document.getElementsByClassName('cita-fecha');
+    
+    for (var i = 0; i < citas.length; i++) {
+        var citaFecha = citas[i].getAttribute('data-cita-fecha');
+        if (citaFecha.startsWith(fechaSeleccionada)) {
+            citas[i].parentNode.style.display = 'table-row';
+        } else {
+            citas[i].parentNode.style.display = 'none';
+        }
+    }
+}
 
+function limpiarFiltro() {
+    var citas = document.getElementsByClassName('cita-fecha');
+    document.getElementById('fecha').value = '';
 
+    for (var i = 0; i < citas.length; i++) {
+        citas[i].parentNode.style.display = 'table-row';
+    }
+}
+
+function filterCitas() {
+    const searchValue = document.getElementById('search').value;
+    fetch(`/admin/search-facturacion?search=${searchValue}`)
+        .then(response => response.json())
+        .then(data => {
+            const citasTableBody = document.getElementById('citasTableBody');
+            citasTableBody.innerHTML = '';
+            data.citas.forEach(cita => {
+                const row = document.createElement('tr');
+                row.innerHTML = `
+                    <td>${cita.id}</td>
+                    <td>${cita.usuario.name} ${cita.usuario.surname}</td>
+                    <td>${new Date(cita.fecha).toLocaleDateString()}</td>
+                    <td>${cita.dinero_cobrado}€</td>
+                `;
+                citasTableBody.appendChild(row);
+            });
+        })
+        .catch(error => console.error('Error:', error));
+}
 

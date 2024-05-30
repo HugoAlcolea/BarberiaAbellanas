@@ -175,6 +175,64 @@
                     </div>
                 </div>
             </div>
+            <div class="container">
+                <div class="row justify-content-center">
+                    <div class="formulario-container col-md-6"
+                        style="background-color: white; border-radius: 15px; padding: 20px;">
+                        <div class="contenedor">
+                            <div class="pestaña">
+                                <span class="circulo rojo"></span>
+                                <span class="circulo amarillo"></span>
+                                <span class="circulo verde"></span>
+                            </div>
+                        </div>
+                        <br>
+                        <div class="registro-container" style="margin-top: -10px">
+                            <div class="ticket text-center">
+                                @if($citaMasCercana)
+                                <div class="row">
+                                    <div class="col-sm-6"><strong>Fecha:</strong></div>
+                                    <div class="col-sm-6"><strong>Hora:</strong></div>
+                                </div>
+                                <div class="row">
+                                    <div class="col-sm-6">
+                                        {{ \Carbon\Carbon::parse($citaMasCercana->fecha)->format('d/m/Y') }}</div>
+                                    <div class="col-sm-6">
+                                        {{ \Carbon\Carbon::parse($citaMasCercana->hora)->format('H:i') }}</div>
+                                </div>
+                                <div class="row">
+                                    <div class="col-sm-12">
+                                        <strong>Código:</strong>
+                                        <h3 style="color:red">{{ $citaMasCercana->codigo }}</h3>
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <form id="delete-form"
+                                        action="{{ route('eliminar_cita', ['id' => $citaMasCercana->id]) }}"
+                                        method="POST">
+                                        @csrf
+                                        @method('DELETE')
+                                        <input type="hidden" id="google-calendar-access-token"
+                                            value="{{ $accessToken }}">
+                                        <input type="hidden" id="cita-id" value="{{ $citaMasCercana->id }}">
+                                        <input type="hidden" id="cita-fecha" value="{{ $citaMasCercana->fecha }}">
+                                        <input type="hidden" id="cita-hora" value="{{ $citaMasCercana->hora }}">
+                                        <button type="button" class="btn btn-danger" onclick="eliminarCita()">Eliminar
+                                            Cita</button>
+                                    </form>
+                                </div>
+                                @else
+                                <p>No tienes citas próximas.</p>
+                                @endif
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <script async defer src="https://apis.google.com/js/api.js" onload="gapiLoaded()"></script>
+            <script async defer src="https://accounts.google.com/gsi/client" onload="gisLoaded()"></script>
+            <script src="{{ asset('js/eliminarEvento.js') }}"></script>
         </div>
 
         <div id="fotos" class="tabcontent">
@@ -370,13 +428,23 @@
                                                 <input type="file" id="profile_image" name="profile_image"
                                                     class="form-control" accept="image/*">
                                             </div>
-                                            <div class="form-group d-flex justify-content-between">
-                                                <button type="submit" formaction="{{ route('delete_account') }}"
-                                                formmethod="POST" class="btn btn-danger"
-                                                onclick="return confirm('¿Está seguro de que desea eliminar su cuenta? Esta acción no se puede deshacer.');">Eliminar
-                                                cuenta</button>
+                                            <div class="row">
+                                                <div class="col-sm-4">
+                                                    <div class="form-group">
+                                                        <button type="submit" formaction="{{ route('delete_account') }}"
+                                                            formmethod="POST" class="btn btn-danger"
+                                                            onclick="return confirm('¿Está seguro de que desea eliminar su cuenta? Esta acción no se puede deshacer.');">Eliminar
+                                                            cuenta</button>
+                                                    </div>
+                                                </div>
+                                                <div class="col-sm-5">
+                                                    <div class="form-group">
+                                                        <button type="submit" class="btn btn-primary">Guardar
+                                                            cambios</button>
+                                                    </div>
+                                                </div>
                                             </div>
-                                            <button type="submit" class="btn btn-primary">Guardar cambios</button>
+
                                         </div>
                                     </div>
                                 </form>

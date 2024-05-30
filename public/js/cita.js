@@ -44,7 +44,7 @@ document.addEventListener('DOMContentLoaded', function () {
         tryLoadAccessToken();
     }
 
-    document.getElementById('cita-form').addEventListener('submit', function (event) {
+    document.getElementById('cita-form').addEventListener('submit', async function (event) {
         event.preventDefault();
         const formData = new FormData(event.target);
         const nombreUsuario = formData.get('nombreUsuario');
@@ -70,21 +70,15 @@ document.addEventListener('DOMContentLoaded', function () {
         };
 
         if (accessToken) {
-            insertEvent(accessToken, eventDetails)
-                .then((success) => {
-                    if (success) {
-                        // window.location.href = "{{ route('mostrar.ticket', ['citaId' => ':citaId']) }}".replace(':citaId', success);
-                    } else {
-                        console.error('Error al programar la cita.');
-                    }
-                })
-                .catch((error) => {
-                    console.error('Error al insertar el evento:', error);
-                });
+            const success = await insertEvent(accessToken, eventDetails);
+            if (success) {
+                event.target.submit();
+            } else {
+                console.error('Error al programar la cita.');
+            }
         } else {
             console.error('El token de acceso no está disponible.');
         }
-        
     });
 });
 

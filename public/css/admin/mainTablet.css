@@ -274,7 +274,7 @@ body {
 
 .photo-preview img {
   display: block;
-  max-width: 200px;
+  max-width: 100px;
   height: auto;
   border-radius: 20px;
 }

@@ -16,25 +16,49 @@ use Illuminate\Support\Facades\Auth;
 use Barryvdh\DomPDF\Facade\Pdf;
 use Carbon\Carbon;
 
+use Google_Client;
+use Google_Service_Calendar;
+
 
 class AdminController extends Controller
 {
-    public function index()
+    public function index(Request $request)
     {
         $users = CustomUser::all();
         $barberos = Barbero::all();
         $estilos_de_cortes = EstilosDeCortes::all();
         $gallery = HaircutGallery::all();
+        $citasAll = Cita::all();
         $citas = Cita::whereNotNull('dinero_cobrado')->get();
         
         foreach ($citas as $cita) {
             $cita->fecha = Carbon::parse($cita->fecha);
         }
     
+        $citasPendientes = Cita::whereNull('dinero_cobrado')
+        ->orderBy('fecha', 'asc')
+        ->orderBy('hora', 'asc')
+        ->get();
+        foreach ($citasPendientes as $cita) {
+            $cita->fecha = Carbon::parse($cita->fecha);
+        }
+    
+        if (Auth::check()) {
+            $response = $this->authenticateWithGoogleCalendar();
+            $accessToken = json_decode($response->getContent(), true)['access_token'];
+        }
+    
         $facturaciones = Cita::with('usuario')->get();
     
-        return view('admin.mainTablet', compact('users', 'barberos', 'estilos_de_cortes', 'gallery', 'citas', 'facturaciones'));
+        $citasDelDia = [];
+        if ($request->filled('fecha')) {
+            $fechaSeleccionada = $request->input('fecha');
+            $citasDelDia = Cita::whereDate('fecha', $fechaSeleccionada)->get();
+        }
+    
+        return view('admin.mainTablet', compact('users', 'barberos', 'estilos_de_cortes', 'gallery','citasAll', 'citas','citasPendientes', 'facturaciones', 'accessToken', 'citasDelDia'));
     }
+    
     
 
 
@@ -47,7 +71,7 @@ class AdminController extends Controller
     public function logout()
     {
         Auth::logout();
-        return redirect()->route('index');
+        return redirect()->route('view');
     }
 
     public function calendar()
@@ -58,6 +82,37 @@ class AdminController extends Controller
         return view('admin.calendar', compact('users', 'barberos', 'servicios'));
     }
 
+    public function authenticateWithGoogleCalendar()
+    {
+        $client = new Google_Client();
+        $client->setApplicationName('Barberia Abellanas');
+        $client->setScopes(Google_Service_Calendar::CALENDAR_EVENTS);
+        $client->setAuthConfig(storage_path('app/service-accounts/calendaralcolea-978337d38352.json'));
+        $client->setAccessType('offline');
+
+        $accessToken = $client->fetchAccessTokenWithAssertion();
+        
+        return response()->json(['access_token' => $accessToken['access_token']]);
+    }
+
+
+    public function eliminarCita($id)
+    {
+
+        $cita = Cita::findOrFail($id);
+        $cita->delete();
+        return redirect()->route('admin.mainTable')->with('success', '¡La cita ha sido eliminada correctamente!');
+
+    }
+
+    public function getCitasPorDia(Request $request)
+    {
+        $fechaSeleccionada = $request->input('fecha');
+        $citasDelDia = Cita::whereDate('fecha', $fechaSeleccionada)->get();
+        return view('nombre_de_tu_vista', compact('citasDelDia'));
+    }
+
+
     public function searchUsers(Request $request)
     {
         $searchTerm = $request->input('search');
@@ -67,9 +122,6 @@ class AdminController extends Controller
     
         return response()->json($users);
     }
-    
-    
-
 
     public function updateUser(Request $request, $id)
     {
@@ -230,8 +282,17 @@ class AdminController extends Controller
     
         return $pdf->download('facturacion_' . $carbonFecha->format('F_Y') . '.pdf');
     }
-    
-    
+
+    public function searchFacturacion(Request $request)
+    {
+        $searchTerm = $request->input('search');
+        $citas = Cita::whereHas('usuario', function ($query) use ($searchTerm) {
+            $query->where('name', 'LIKE', "%{$searchTerm}%")
+                ->orWhere('surname', 'LIKE', "%{$searchTerm}%");
+        })->with('usuario')->get();
+
+        return response()->json(['citas' => $citas]);
+    }
 
 
 }

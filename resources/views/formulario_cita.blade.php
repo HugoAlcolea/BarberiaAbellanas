@@ -21,7 +21,7 @@
     <div class="center-box">
         <div class="box">
             <span></span>
-            <a href="{{ route('index') }}" class="back-button">
+            <a href="{{ route('view') }}" class="back-button">
                 <img src="{{ asset('img/arrow-icon.png') }}" alt="Volver al inicio">
             </a>
             <div class="container" id="main-container">
