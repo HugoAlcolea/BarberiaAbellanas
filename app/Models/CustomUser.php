@@ -44,5 +44,22 @@ class CustomUser extends Model implements Authenticatable
     {
         return $this->hasMany(Cita::class, 'user_id');
     }
+
+    public function images()
+    {
+        return $this->hasMany(HaircutGallery::class, 'user_id');
+    }
+
+    protected static function boot()
+    {
+        parent::boot();
+
+        static::deleting(function ($user) {
+            $user->images()->each(function ($image) {
+                \Storage::delete('public/haircut_gallery/' . $image->photo_name);
+                $image->delete();
+            });
+        });
+    }
 }
 

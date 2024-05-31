@@ -87,10 +87,26 @@ class CustomUserController extends Controller
         ];
     
         $messages = [
+            'name.required' => 'El nombre es obligatorio.',
+            'surname.required' => 'El apellido es obligatorio.',
+            'username.required' => 'El nombre de usuario es obligatorio.',
             'username.unique' => 'El nombre de usuario ya está en uso.',
-            'email.unique' => 'El correo electrónico ya está en uso.',
+            'phone.required' => 'El teléfono es obligatorio.',
+            'date_of_birth.required' => 'La fecha de nacimiento es obligatoria.',
+            'date_of_birth.date' => 'La fecha de nacimiento no es válida.',
+            'date_of_birth.before' => 'La fecha de nacimiento no puede ser una fecha futura.',
+            'gender.required' => 'El género es obligatorio.',
             'gender.in' => 'El campo de género debe ser hombre o mujer.',
-            'confirm_password.same' => 'La contraseña y la confirmación de contraseña no coinciden.',
+            'email.required' => 'El correo electrónico es obligatorio.',
+            'email.email' => 'El correo electrónico no es válido.',
+            'email.unique' => 'El correo electrónico ya está en uso.',
+            'password.required' => 'La contraseña es obligatoria.',
+            'password.min' => 'La contraseña debe tener al menos 6 caracteres.',
+            'confirm_password.required' => 'La confirmación de la contraseña es obligatoria.',
+            'confirm_password.same' => 'La contraseña y la confirmación de la contraseña no coinciden.',
+            'profile_image.image' => 'La imagen de perfil debe ser un archivo de imagen.',
+            'profile_image.mimes' => 'La imagen de perfil debe ser un archivo de tipo: jpeg, png, jpg, gif.',
+    
         ];
     
         $request->validate($rules, $messages);
@@ -294,7 +310,7 @@ class CustomUserController extends Controller
         $hairstyle_id = $request->input('estilo_id');
     
         $fotosQuery = HaircutGallery::query();
-        
+    
         if ($request->has('user_id') && $request->input('user_id') === strval($user_id)) {
             $fotosQuery->where('user_id', $user_id);
         }
@@ -309,18 +325,21 @@ class CustomUserController extends Controller
         $hairstyle = EstilosDeCortes::all();
         $usuarios = CustomUser::all();
         $estilos = EstilosDeCortes::all();
+        
+        $citaMasCercana = Cita::where('user_id', auth()->id())
+            ->where('fecha', '>=', now())
+            ->orderBy('fecha', 'asc')
+            ->first();
+            
+        $accessToken = null;
+        if (Auth::check()) {
+            $response = $this->authenticateWithGoogleCalendar();
+            $accessToken = json_decode($response->getContent(), true)['access_token'];
+        }
     
-        return view('index', compact('fotos', 'barber', 'hairstyle', 'usuarios', 'estilos'));
+        return view('index', compact('fotos', 'barber', 'hairstyle', 'usuarios', 'estilos', 'citaMasCercana', 'accessToken'));
     }
     
-    
-    
-    
-    
-    
-
-
-
     public function updateProfile(Request $request) {
         $user = Auth::user();
     
@@ -384,17 +403,14 @@ class CustomUserController extends Controller
     }
     
     public function deleteAccount(Request $request)
-{
-    $user = Auth::user();
-
-    if ($user) {
-        $user->delete();
-        
-        return redirect()->route('login')->with('success', 'Cuenta eliminada correctamente.');
+    {
+        $user = Auth::user();
+        if ($user) {
+            $user->delete();
+            return redirect()->route('login')->with('success', 'Cuenta eliminada correctamente.');
+        }
+        return redirect()->back()->with('error', 'Hubo un problema al intentar eliminar la cuenta.');
     }
-
-    return redirect()->back()->with('error', 'Hubo un problema al intentar eliminar la cuenta.');
-}
     
 
     public function logout(){

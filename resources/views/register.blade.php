@@ -78,7 +78,7 @@
                                 </div>
                                 <div class="input-group">
                                     <label for="date_of_birth">Fecha de nacimiento:</label>
-                                    <input type="date" id="date_of_birth" name="date_of_birth" required>
+                                    <input type="date" id="date_of_birth" name="date_of_birth" required max="{{ date('d-m-Y') }}">
                                 </div>
                             </div>
 
@@ -140,6 +140,8 @@
                                     reader.readAsDataURL(file);
                                 }
                             }
+
+                            document.getElementById('date_of_birth').max = new Date().toISOString().split('T')[0];
                             </script>
 
                             <div class="buttons">

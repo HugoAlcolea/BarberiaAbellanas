@@ -229,7 +229,7 @@ class AdminController extends Controller
     
     public function processFacturacion(Request $request)
     {
-        $validatedData = $request->validate([
+        $rules = [
             'codigo' => [
                 'required',
                 'string',
@@ -239,27 +239,44 @@ class AdminController extends Controller
             ],
             'euros' => 'required|numeric|min:0',
             'points' => 'required|integer',
-        ]);
-
+        ];
+        
+        $messages = [
+            'codigo.required' => 'El campo código es obligatorio.',
+            'codigo.string' => 'El código debe ser una cadena de texto.',
+            'codigo.max' => 'El código no puede tener más de 255 caracteres.',
+            'codigo.exists' => 'El código no existe en las citas.',
+            'codigo.regex' => 'El formato del código es inválido. Debe comenzar con "A" seguido de 4 dígitos.',
+            'euros.required' => 'El campo dinero es obligatorio.',
+            'euros.numeric' => 'El dinero debe ser un número.',
+            'euros.min' => 'El dinero no puede ser un valor negativo.',
+            'points.required' => 'El campo puntos es obligatorio.',
+            'points.integer' => 'Los puntos deben ser un número entero.',
+        ];
+        
+        $request->validate($rules, $messages);
+        
+    
         try {
             $cita = Cita::where('codigo', $validatedData['codigo'])->firstOrFail();
-
+    
             $cita->dinero_cobrado = $validatedData['euros'];
             $cita->save();
-
+    
             $userId = $cita->user_id;
-
+    
             $stats = StatsUser::firstOrNew(['user_id' => $userId]);
-
+    
             $stats->haircuts += 1;
             $stats->points += $validatedData['points'];
             $stats->save();
-
+    
             return redirect()->back()->with('success', 'Facturación procesada correctamente');
         } catch (\Exception $e) {
             return redirect()->back()->with('error', 'Error al procesar la facturación: ' . $e->getMessage());
         }
     }
+    
 
     public function generarPDF(Request $request)
     {

@@ -35,7 +35,7 @@
                         value="{{ Auth::user()->surname }}">
                     <div class="input-group">
                         <label for="fecha">Fecha:</label>
-                        <input type="date" id="fecha" name="fecha" min="<?php echo date('Y-m-d'); ?>" required>
+                        <input type="date" id="fecha" name="fecha" min="<?php echo date('Y-m-d'); ?>" required min="{{ now()->format('Y-m-d') }}">
                     </div>
                     <div class="input-group">
                         <label for="hora">Hora:</label>

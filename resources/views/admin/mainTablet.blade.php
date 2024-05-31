@@ -276,7 +276,8 @@
                     <h2>Citas Pendientes</h2>
                     <div class="table-responsive">
                         <div class="input-group">
-                            <input type="date" id="fecha" name="fecha" class="form-control">
+                            <input type="date" id="fecha" name="fecha" class="form-control"
+                                min="{{ now()->format('Y-m-d') }}">
                             <button class="btn btn-primary" onclick="filtrarCitas()">Buscar</button>
                             <button class="btn btn-secondary" onclick="limpiarFiltro()">Limpiar Filtro</button>
                         </div>
@@ -339,6 +340,17 @@
                 <h1 class="titulo">Facturación</h1>
                 <div class="row">
                     <div class="col-md-6">
+                        @if(session('error'))
+                        <div class="error-message">
+                            {{ session('error') }}
+                        </div>
+                        @endif
+
+                        @if(session('success'))
+                        <div class="success-message">
+                            {{ session('success') }}
+                        </div>
+                        @endif
                         <form id="facturacionForm" method="POST" action="{{ route('admin.facturacion') }}">
                             @csrf
                             <div class="mb-3">
@@ -391,7 +403,8 @@
                                     @csrf
                                     <div class="mb-3">
                                         <label for="fecha">Seleccionar Mes y Año:</label>
-                                        <input type="date" id="fecha" name="fecha" class="form-control" required>
+                                        <input type="date" id="fecha" name="fecha" class="form-control" required
+                                            max="{{ now()->format('Y-m-d') }}">
                                     </div>
                                     <button type="submit" class="btn btn-primary">Descargar PDF</button>
                                 </form>

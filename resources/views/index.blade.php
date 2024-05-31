@@ -429,7 +429,7 @@
                                                     class="form-control" accept="image/*">
                                             </div>
                                             <div class="row">
-                                                <div class="col-sm-4">
+                                                <div class="col-sm-5">
                                                     <div class="form-group">
                                                         <button type="submit" formaction="{{ route('delete_account') }}"
                                                             formmethod="POST" class="btn btn-danger"
