@@ -341,13 +341,13 @@
                 <div class="row">
                     <div class="col-md-6">
                         @if(session('error'))
-                        <div class="error-message">
+                        <div class="error-message" style="color: red">
                             {{ session('error') }}
                         </div>
                         @endif
 
                         @if(session('success'))
-                        <div class="success-message">
+                        <div class="success-message" style="color: green">
                             {{ session('success') }}
                         </div>
                         @endif

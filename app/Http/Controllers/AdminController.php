@@ -254,28 +254,28 @@ class AdminController extends Controller
             'points.integer' => 'Los puntos deben ser un número entero.',
         ];
         
-        $request->validate($rules, $messages);
-        
-    
+        $validatedData = $request->validate($rules, $messages);
+
         try {
             $cita = Cita::where('codigo', $validatedData['codigo'])->firstOrFail();
-    
+
             $cita->dinero_cobrado = $validatedData['euros'];
             $cita->save();
-    
+
             $userId = $cita->user_id;
-    
+
             $stats = StatsUser::firstOrNew(['user_id' => $userId]);
-    
+
             $stats->haircuts += 1;
             $stats->points += $validatedData['points'];
             $stats->save();
-    
+
             return redirect()->back()->with('success', 'Facturación procesada correctamente');
         } catch (\Exception $e) {
             return redirect()->back()->with('error', 'Error al procesar la facturación: ' . $e->getMessage());
         }
     }
+
     
 
     public function generarPDF(Request $request)
