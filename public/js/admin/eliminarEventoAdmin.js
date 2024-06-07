@@ -70,7 +70,7 @@ function sumar30Minutos(hora) {
 
 async function eliminarCita(form) {
     const fechaCompleta = form.querySelector('input[name="cita-fecha"]').value.trim();
-    const fecha = fechaCompleta.split(' ')[0]; // Solo obtener la parte de la fecha
+    const fecha = fechaCompleta.split(' ')[0];
     const horaInicio = form.querySelector('input[name="cita-hora"]').value.trim();
 
     console.log('Fecha:', fecha);
@@ -85,7 +85,6 @@ async function eliminarCita(form) {
         console.error('Formato de fecha incorrecto:', fecha);
     }
 
-    // Verificación de la variable 'fecha' justo después de su extracción
     console.log('Valor de la fecha después de trim:', fecha);
 
     const [year, month, day] = fecha.split('-').map(Number);

@@ -9,9 +9,6 @@ use App\Models\StatsUser;
 use Illuminate\Support\Facades\Auth;
 
 Route::get('/', [CustomUserController::class, 'view'])->name('view');
-Route::get('/index', function() {
-    return redirect('/');
-});
 
 Route::get('/google-auth/redirect', function () {
     return Socialite::driver('google')->redirect();
@@ -104,7 +101,6 @@ Route::middleware(['auth', 'admin'])->group(function () {
     Route::post('/admin/upload-photo', [AdminController::class, 'uploadPhoto'])->name('admin.upload-photo');
     Route::post('/admin/facturacion', [AdminController::class, 'processFacturacion'])->name('admin.facturacion');
     Route::post('/descargar-facturacion', [AdminController::class, 'generarPDF'])->name('admin.descargarFacturacion');
-    Route::get('/index', [CustomUserController::class, 'index'])->name('index');
     Route::get('/admin/search-facturacion', [AdminController::class, 'searchFacturacion'])->name('admin.searchFacturacion');
     Route::get('/admin-logout', [AdminController::class, 'logout'])->name('admin.logout');
 });

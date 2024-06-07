@@ -46,29 +46,6 @@ class CustomUserController extends Controller
         return view('index', compact('fotos', 'barber', 'hairstyle', 'usuarios', 'estilos', 'cita', 'citaMasCercana', 'accessToken'));
     }
 
-    public function index()
-    {
-        $barber = Barbero::all();
-        $hairstyle = EstilosDeCortes::all();
-        $fotos = HaircutGallery::paginate(9);
-        $usuarios = CustomUser::all(); 
-        $estilos = EstilosDeCortes::all(); 
-        $cita = Cita::all();
-        $accessToken = null;
-
-        $citaMasCercana = Cita::where('user_id', auth()->id())
-        ->where('fecha', '>=', now())
-        ->orderBy('fecha', 'asc')
-        ->first();
-        
-        if (Auth::check()) {
-            $response = $this->authenticateWithGoogleCalendar();
-            $accessToken = json_decode($response->getContent(), true)['access_token'];
-        }
-
-        return view('index', compact('fotos', 'barber', 'hairstyle', 'usuarios', 'estilos', 'cita', 'citaMasCercana', 'accessToken'));
-    }
-
     public function register(Request $request)
     {
         $userId = $request->input('id') ?? Auth::id();
@@ -294,12 +271,16 @@ class CustomUserController extends Controller
         return view('ticket', compact('cita'));
     }
     
-
-    public function eliminarCita($id)
+    public function eliminarCita( $id)
     {
-        $cita = Cita::findOrFail($id);
-        $cita->delete();
-        return redirect()->route('view')->with('success', '¡La cita ha sido eliminada correctamente!');
+        try {
+            $cita = Cita::findOrFail($id);
+            $cita->delete();
+            
+            return redirect()->route('view')->with('success', '¡La cita ha sido eliminada correctamente!');
+        } catch (\Exception $e) {
+            return redirect()->route('view')->with('error', 'Hubo un problema al eliminar la cita: ' . $e->getMessage());
+        }
     }
 
 

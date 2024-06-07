@@ -138,7 +138,7 @@
                     if (file_exists(public_path($profileImagePath))) {
                     echo "<img src='" . asset($profileImagePath) . "' alt='Perfil de " . Auth::user()->username . "'>";
                     } else {
-                    echo "<img src='" . asset('storage/profile_images/default.jpg') . "' alt='Imagen por defecto'>" ; }
+                    echo "<img src='" . asset(' storage/profile_images/default.jpg') . "' alt='Imagen por defecto'>" ; }
                         } @endphp </div>
 
                     <div class="nombre-perfil">
@@ -232,7 +232,7 @@
 
             <script async defer src="https://apis.google.com/js/api.js" onload="gapiLoaded()"></script>
             <script async defer src="https://accounts.google.com/gsi/client" onload="gisLoaded()"></script>
-            <!-- <script src="{{ asset('js/eliminarEvento.js') }}"></script> -->
+            <script src="{{ asset('js/eliminarEvento.js') }}"></script>
         </div>
 
         <div id="fotos" class="tabcontent">
@@ -335,7 +335,7 @@
                                 echo "<img src='" . asset($profileImagePath) . "'
                                     alt='Perfil de " . Auth::user()->username . "'>";
                                 } else {
-                                echo "<img src='" . asset('storage/profile_images/default.jpg')
+                                echo "<img src='" . asset(' storage/profile_images/default.jpg')
                                     . "' alt='Imagen por defecto'>" ; } } @endphp </div>
                                 <div class="profile-info">
                                     <div class="nombre-perfil-settings">
