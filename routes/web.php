@@ -8,20 +8,10 @@ use App\Models\CustomUser;
 use App\Models\StatsUser;
 use Illuminate\Support\Facades\Auth;
 
-
-/*
-|--------------------------------------------------------------------------
-| Web Routes
-|--------------------------------------------------------------------------
-|
-| Here is where you can register web routes for your application.
-| These routes are loaded by the RouteServiceProvider within a group which
-| contains the "web" middleware group. Now create something great!
-|
-*/
-
 Route::get('/', [CustomUserController::class, 'view'])->name('view');
-Route::get('/index', [CustomUserController::class, 'index'])->name('index');
+Route::get('/index', function() {
+    return redirect('/');
+});
 
 Route::get('/google-auth/redirect', function () {
     return Socialite::driver('google')->redirect();
@@ -76,11 +66,6 @@ Route::post('/register', [CustomUserController::class, 'register'])->name('regis
 // Rutas de login
 Route::get('/login', [CustomUserController::class, 'showLoginForm'])->name('login');
 Route::post('/login', [CustomUserController::class, 'login'])->name('login.post');
-
-// Rutas de Principal
-Route::get('/principal', function () {
-    return view('principal');
-})->name('principal');
 
 // Rutas de Citas
 Route::get('/cita', [CustomUserController::class, 'mostrarFormularioCita'])->name('cita.formulario');

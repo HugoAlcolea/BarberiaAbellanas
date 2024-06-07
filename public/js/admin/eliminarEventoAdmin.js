@@ -69,8 +69,9 @@ function sumar30Minutos(hora) {
 }
 
 async function eliminarCita(form) {
-    const fecha = form.querySelector('input[name="cita-fecha"]').value;
-    const horaInicio = form.querySelector('input[name="cita-hora"]').value;
+    const fechaCompleta = form.querySelector('input[name="cita-fecha"]').value.trim();
+    const fecha = fechaCompleta.split(' ')[0]; // Solo obtener la parte de la fecha
+    const horaInicio = form.querySelector('input[name="cita-hora"]').value.trim();
 
     console.log('Fecha:', fecha);
     console.log('Hora inicio:', horaInicio);
@@ -78,19 +79,44 @@ async function eliminarCita(form) {
     const horaFin = sumar30Minutos(horaInicio);
     console.log('Hora fin:', horaFin);
 
-    const [year, month, day] = fecha.split('-');
-    const [hourStart, minuteStart, secondStart] = horaInicio.split(':');
-    const [hourEnd, minuteEnd, secondEnd] = horaFin.split(':');
+    if (fecha.includes('-')) {
+        console.log('Formato de fecha correcto:', fecha);
+    } else {
+        console.error('Formato de fecha incorrecto:', fecha);
+    }
+
+    // Verificación de la variable 'fecha' justo después de su extracción
+    console.log('Valor de la fecha después de trim:', fecha);
+
+    const [year, month, day] = fecha.split('-').map(Number);
+    const [hourStart, minuteStart] = horaInicio.split(':').map(Number);
+    const [hourEnd, minuteEnd] = horaFin.split(':').map(Number);
+
+    console.log('Year:', year, 'Month:', month, 'Day:', day);
+    console.log('Hour Start:', hourStart, 'Minute Start:', minuteStart);
+    console.log('Hour End:', hourEnd, 'Minute End:', minuteEnd);
+
+    if (isNaN(year) || isNaN(month) || isNaN(day) || isNaN(hourStart) || isNaN(minuteStart) || isNaN(hourEnd) || isNaN(minuteEnd)) {
+        console.error('One or more date parts are NaN');
+        return;
+    }
 
     try {
         console.log('Construyendo fechas:');
-        console.log('Fecha inicio:', new Date(year, month - 1, day, hourStart, minuteStart, secondStart));
-        console.log('Fecha fin:', new Date(year, month - 1, day, hourEnd, minuteEnd, secondEnd));
+        const fechaInicio = new Date(year, month - 1, day, hourStart, minuteStart, 0);
+        const fechaFin = new Date(year, month - 1, day, hourEnd, minuteEnd, 0);
+
+        console.log('Fecha inicio:', fechaInicio.toString());
+        console.log('Fecha fin:', fechaFin.toString());
+
+        if (isNaN(fechaInicio.getTime()) || isNaN(fechaFin.getTime())) {
+            throw new RangeError('Invalid Date');
+        }
 
         const response = await gapi.client.calendar.events.list({
             calendarId: CALENDAR_ID,
-            timeMin: new Date(year, month - 1, day, hourStart, minuteStart, secondStart).toISOString(),
-            timeMax: new Date(year, month - 1, day, hourEnd, minuteEnd, secondEnd).toISOString(),
+            timeMin: fechaInicio.toISOString(),
+            timeMax: fechaFin.toISOString(),
             singleEvents: true,
             orderBy: 'startTime'
         });
@@ -120,3 +146,5 @@ async function eliminarCita(form) {
         console.error('Error al buscar o eliminar el evento:', error);
     }
 }
+
+

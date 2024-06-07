@@ -232,7 +232,7 @@
 
             <script async defer src="https://apis.google.com/js/api.js" onload="gapiLoaded()"></script>
             <script async defer src="https://accounts.google.com/gsi/client" onload="gisLoaded()"></script>
-            <script src="{{ asset('js/eliminarEvento.js') }}"></script>
+            <!-- <script src="{{ asset('js/eliminarEvento.js') }}"></script> -->
         </div>
 
         <div id="fotos" class="tabcontent">
@@ -450,7 +450,7 @@
                                 </form>
                             </div>
                             @else
-                            <p>Debe estar autenticado para editar su perfil.</p>
+                            <p style="color: white">Debe estar autenticado para editar su perfil.</p>
                             @endif
                         </div>
                     </div>
